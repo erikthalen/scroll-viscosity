@@ -1,52 +1,40 @@
 import {appendAfter, getStyleStr} from './utils'
 
-export default class Placeholder {
-  constructor({el, styles}) {
-    this.element = el
+// the copycat takes the subjects place
+export default class Copycat {
+  constructor({element, styles}) {
+    this.subject = element
     this.styles = styles
 
-    this.placeholder = null
-
-    // relevant for inline-styled elements
-    this.child = this.element.firstElementChild
-    this.isCollapsing = getStyleStr(this.element, `display`).includes('inline')
+    // relevant for inline-styled subjects
+    this.child = this.subject.firstElementChild
+    this.isCollapsing = getStyleStr(this.subject, `display`).includes('inline')
     this.isChildCollapsing = this.child && getStyleStr(this.child, `display`).includes('inline')
   }
 
-  // setup the element that will take up space in the dom tree
+  // setup the subject that will take up space in the dom tree
   create() {
-    this.placeholder = document.createElement("div")
-    this.placeholder.classList.add("springy-placeholder")
+    this.copycat = document.createElement('div')
+    this.copycat.classList.add('viscosity-copycat')
     this.applyStyles()
-    appendAfter(this.placeholder)(this.element)
-
-    if (this.child)
-      this.setupChildren()
+    appendAfter(this.copycat)(this.subject)
   }
 
   update({styles}) {
     this.styles = styles
-
     this.applyStyles.bind(this)
   }
 
   remove() {
-    if (!this.placeholder)
-      return
-
-    if (this.child)
-      this.revertChildren()
-
-    this.placeholder.remove()
-    this.placeholder = null
+    this.copycat.remove()
   }
 
   applyStyles() {
-    Object.assign(this.placeholder.style, {
+    Object.assign(this.copycat.style, {
       position: this.styles.position !== 'static' && this.styles.position,
       width: this.styles.width,
       height: this.styles.height,
-      display: this.element.tagName !== 'IMG' && this.styles.display !== 'list-item' && this.styles.display,
+      display: this.subject.tagName !== 'IMG' && this.styles.display !== 'list-item' && this.styles.display,
       left: this.styles.leftPos !== this.styles.bodyMargin && this.styles.leftPos - this.styles.bodyMargin + 'px',
       margin: this.getMargins(),
       padding: this.styles.padding !== '0px' && this.styles.padding
@@ -68,15 +56,5 @@ export default class Placeholder {
     return this.child
       ? parseFloat(getStyleStr(this.child, `margin${direction}`))
       : 0
-  }
-
-  setupChildren() {
-    if (this.isChildCollapsing || this.isCollapsing)
-      return
-    this.child.style.marginTop = 0
-  }
-  
-  revertChildren() {
-    this.child.style.removeProperty('margin-top')
   }
 }

@@ -5,13 +5,13 @@
  */
 
 export default class Animation {
-  constructor({el, easing}) {
-    this.element = el
+  constructor({element, easing}) {
+    this.subject = element
     this.easing = easing
 
-    this.isRunning = false,
+    this.isRunning = false
     this.isInView = true
-    this.setCurrentPos() // for lerping
+    this.setCurrentPos()
     // this.startObserve()
   }
 
@@ -22,6 +22,7 @@ export default class Animation {
   update() {
     if (!this.isRunning)
       return
+
     requestAnimationFrame(this.update.bind(this))
 
     this.currentPosition = this.isInView
@@ -42,14 +43,14 @@ export default class Animation {
   }
 
   setStyle() {
-    this.element.style.transform = `translate3d(0, ${this.currentPosition}px, 0)`
+    this.subject.style.transform = `translate3d(0, ${this.currentPosition}px, 0)`
   }
 
   removeStyle() {
-    this.element.style.removeProperty('transform')
+    this.subject.style.removeProperty('transform')
   }
 
-  // does this do much? for performance
+  // note: does this do much? for performance
   startObserve() {
     let callback = (entries, observer) => {
       entries.map(entry => {
@@ -57,7 +58,7 @@ export default class Animation {
       })
     }
     let observer = new IntersectionObserver(callback)
-    observer.observe(this.element)
+    observer.observe(this.subject)
   }
 
   start() {

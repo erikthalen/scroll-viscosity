@@ -49,8 +49,12 @@ p {
 }
 
 .odd-margins {
-	margin: 10px 15px 35px 20px;
+	margin: 5vw;
 	display: inline-block;
+
+	h1 + h1 {
+		display: inline-block;
+	}
 }
 
 .padding {
@@ -89,11 +93,11 @@ img:not(.big) {
 }
 
 .borders {
-	.springy {
+	.viscosity {
 		outline: 1px solid rgba(0, 0, 255, 0.2);
 	}
 
-	.springy-placeholder {
+	.viscosity-copycat {
 		outline: 1px solid rgba(255, 0, 0, 0.2);
 	}
 }
