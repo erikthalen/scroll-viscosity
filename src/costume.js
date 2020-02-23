@@ -9,14 +9,14 @@ export default class Costume {
 
     // relevant for inline-styled subjects
     this.child = this.subject.firstElementChild
-    this.isCollapsing = getStyleStr(this.subject, `display`).includes('inline')
-    this.isChildCollapsing = this.child && getStyleStr(this.child, `display`).includes('inline')
+    this.isCollapsing = getStyleStr(this.subject, 'display').includes('inline')
+    this.isChildCollapsing = this.child && getStyleStr(this.child, 'display').includes('inline')
   }
 
   setup() {
     Object.assign(this.subject.style, {
       position: "fixed",
-      top: sumAsFloat(this.styles.topPos, this.styles.paddingTop, this.styles.marginTop) + "px",
+      top: sumAsFloat(this.styles.topPos, this.styles.paddingTop, this.styles.marginTop) + 'px',
       left: this.styles.leftPos + 'px',
       right: this.styles.rightPos + 'px',
       width: this.styles.width,
@@ -38,6 +38,10 @@ export default class Costume {
       'height',
       'margin'
     ])
+
+    if (this.subject.getAttribute('style')) {
+      this.subject.removeAttribute('style')
+    }
 
     if (this.child)
       this.revertChildren()

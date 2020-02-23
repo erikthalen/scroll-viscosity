@@ -25,17 +25,21 @@ known bugs:
 
 */
 
+import imagesLoaded from 'imagesloaded'
+
 import Animation from './animation'
 import Resize from './resize'
 import Copycat from './copycat'
 import Costume from './costume'
 
-import {getStyleRefs} from './utils'
+import {hasParentWithViscosity, getStyleRefs} from './utils'
 
 class Viscosity {
   constructor({element, easing}) {
     this.subject = element
     this.easing = easing || 0.3
+
+    this.subject.dataset.viscosity = 'is-bound'
 
     if (!this.subject) {
       return
@@ -56,16 +60,32 @@ class Viscosity {
     // handles the styling of the subject, so it can move
     this.costume = new Costume({element: this.subject, styles: this.originalStyles})
 
-    this.init()
+    // todo: fails on first pageload
+    // imagesLoaded(this.subject, this.init.bind(this))
+
+    // todo: better callback, not using time
+    // wait for all Viscosity to construct, before checking
+    setTimeout(() => {
+      if (hasParentWithViscosity(this.subject)) {
+        this.subject.dataset.viscosity = 'controlled-by-parent'
+        return
+      }
+
+      this.init()
+    }, 100)
   }
 
   init() {
-    // todo: 'global' handler to save every viscous instance's style before messing with the content flow
     setTimeout(() => {
+      if (hasParentWithViscosity(this.subject)) {
+        return
+      }
+      // todo: 'global' handler to save every viscous instance's style before messing with the content flow
+
       this.costume.setup()
       this.copycat.create()
       this.animation.start()
-    })
+    }, 10)
   }
 
   // revert everything back to normal
@@ -73,6 +93,7 @@ class Viscosity {
     this.costume.revert()
     this.copycat.remove()
     this.animation.stop()
+    this.subject.dataset.viscosity = 'is-destroyed'
   }
 
   // what to do on screen resize

@@ -45,11 +45,23 @@ export const placementStyleProps = [
 ]
 
 export const getStyleRefs = (el) => {
-	const obj = {}
-    placementStyleProps.forEach(style => (obj[style] = getStyleStr(el, style)))
-    obj.topPos = el.getBoundingClientRect().top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) - parseFloat(getStyleStr(el, 'paddingTop'))
-    obj.leftPos = el.getBoundingClientRect().left
-    obj.rightPos = el.getBoundingClientRect().right
-    obj.bodyMargin = parseFloat(getStyleStr(document.body, 'marginLeft'))
-	return obj
-  }
+  const obj = {}
+  placementStyleProps.forEach(style => (obj[style] = getStyleStr(el, style)))
+  obj.topPos = el.getBoundingClientRect().top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) - parseFloat(getStyleStr(el, 'paddingTop'))
+  obj.leftPos = el.getBoundingClientRect().left
+  obj.rightPos = el.getBoundingClientRect().right
+  obj.bodyMargin = parseFloat(getStyleStr(document.body, 'marginLeft'))
+  return obj
+}
+
+export const hasParentWithViscosity = (el, count = 0) => {
+  // there should not be more than one instance of viscosity active at once,
+  // on each element
+  return (el === document.body && count < 2)
+    ? false
+    : (count > 1)
+      ? true
+      : (el.dataset.viscosity)
+        ? hasParentWithViscosity(el.parentElement, count + 1)
+        : hasParentWithViscosity(el.parentElement, count)
+}

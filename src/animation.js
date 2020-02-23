@@ -48,6 +48,10 @@ export default class Animation {
 
   removeStyle() {
     this.subject.style.removeProperty('transform')
+
+    if (this.subject.getAttribute('style')) {
+      this.subject.removeAttribute('style')
+    }
   }
 
   // note: does this do much? for performance
