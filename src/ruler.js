@@ -18,9 +18,8 @@ export default function(n) {
   const els = Array(n).fill(0)
   els.forEach((slot, i) => {
     const el = document.createElement('li')
-    el.innerHTML = i * 100
     setStyle(el)
-    el.style.top = i * 100 + 'px'
+    el.style.top = el.innerHTML = i * 100 + 'px'
     fragment.appendChild(el)
   })
   document.body.appendChild(container)

@@ -42,7 +42,11 @@ export default class Animation {
   }
 
   setStyle() {
-    this.element.style.transform = `translateY(${this.currentPosition}px)`
+    this.element.style.transform = `translate3d(0, ${this.currentPosition}px, 0)`
+  }
+
+  removeStyle() {
+    this.element.style.removeProperty('transform')
   }
 
   // does this do much? for performance
@@ -63,5 +67,6 @@ export default class Animation {
 
   stop() {
     this.isRunning = false
+    this.removeStyle()
   }
 }

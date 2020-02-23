@@ -1,5 +1,12 @@
 // todo: this test file, if it's worth it
 
+/**
+
+not really in use...
+
+
+*/
+
 const styleFloat = (el, prop) => parseFloat(style(el, prop))
 const getAll = (els, prop) => els.map(el => styleFloat(el, prop))
 const isBelowOneDiff = (x, y) => Math.abs(x - y) < 1

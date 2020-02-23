@@ -20,7 +20,7 @@ imagesLoaded('body').then(imgs => {
   // ui
   // const toggle = e => Springies.forEach(s => s.toggle())
   const toggleEl = document.querySelector(".toggle-springy")
-  toggleEl.addEventListener("change", () => test(Ss))
+  toggleEl.addEventListener("change", () => Ss.forEach(s => s.toggle()))
 
   const borders = e => document.body.classList.toggle("borders")
   const bordersEl = document.querySelector(".toggle-borders")

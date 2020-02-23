@@ -1,6 +1,6 @@
 /**
  * runs a callback on resize
- * used an easy debounce timer
+ * useing an easy debounce timer
  */
 
 export default class Resize {
@@ -14,7 +14,6 @@ export default class Resize {
       this.resizeTimer = setTimeout(() => {
         this.callback()
       }, 250)
-
     })
   }
 }

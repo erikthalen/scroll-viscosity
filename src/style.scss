@@ -49,12 +49,8 @@ p {
 }
 
 .odd-margins {
-	margin: 10px;
+	margin: 10px 15px 35px 20px;
 	display: inline-block;
-
-	* {
-		// margin: 0;
-	}
 }
 
 .padding {
@@ -79,6 +75,7 @@ p {
 
 .background {
 	background: #fee;
+	padding: 40px;
 }
 
 img:not(.big) {
@@ -96,7 +93,7 @@ img:not(.big) {
 		outline: 1px solid rgba(0, 0, 255, 0.2);
 	}
 
-	.springy__wrapper {
+	.springy-placeholder {
 		outline: 1px solid rgba(255, 0, 0, 0.2);
 	}
 }
