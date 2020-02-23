@@ -12,8 +12,8 @@ viscosity(element)
 
 // with an object
 viscosity({
-	element,
-	easing: 0.2,
+  element,
+  easing: 0.2,
 })
 
 // with a selector
