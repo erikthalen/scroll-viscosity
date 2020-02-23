@@ -12,7 +12,7 @@ var imgs = document.querySelectorAll('img')
 // init
 imagesLoaded('body', () => {
   const els = [...document.body.querySelectorAll('.viscosity')]
-  const Vs = els.map(el => viscosity({element: el, easing: el.dataset.amount}))
+  const Vs = els.map(el => viscosity({element: el, wacky: true}))
 
   // used for troubleshooting
   ruler(100) // create visual 'ruler'

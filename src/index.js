@@ -8,6 +8,9 @@
 // todo: loads of (boring) integration tests 👀
 // todo: publish 🥂🍾
 
+// idea: create one 'central' controller that dispatches events and keep track of every instance,
+// (good for having control to only run inits what all instanses are ready)
+
 /**
  * what is this
  *
@@ -35,9 +38,15 @@ import Costume from './costume'
 import {hasParentWithViscosity, getStyleRefs} from './utils'
 
 class Viscosity {
-  constructor({element, easing}) {
-    this.subject = element
-    this.easing = easing || 0.3
+  constructor({element, easing, wacky}) {
+    this.subject = (typeof element === 'string')
+      ? document.querySelector(element)
+      : element
+    this.easing = wacky
+      ? (Math.random() * 1.5 + .5) / 10 // 0.05 - 0.2
+      : easing
+        ? easing
+        : 0.3
 
     this.subject.dataset.viscosity = 'is-bound'
 
@@ -63,6 +72,10 @@ class Viscosity {
     // todo: fails on first pageload
     // imagesLoaded(this.subject, this.init.bind(this))
 
+    this.init()
+  }
+
+  init() {
     // todo: better callback, not using time
     // wait for all Viscosity to construct, before checking
     setTimeout(() => {
@@ -70,22 +83,12 @@ class Viscosity {
         this.subject.dataset.viscosity = 'controlled-by-parent'
         return
       }
-
-      this.init()
-    }, 100)
-  }
-
-  init() {
-    setTimeout(() => {
-      if (hasParentWithViscosity(this.subject)) {
-        return
-      }
       // todo: 'global' handler to save every viscous instance's style before messing with the content flow
 
       this.costume.setup()
       this.copycat.create()
       this.animation.start()
-    }, 10)
+    })
   }
 
   // revert everything back to normal
@@ -119,6 +122,20 @@ class Viscosity {
   }
 }
 
-export default function({element, easing}) {
-  return new Viscosity({element, easing})
+export default function(args) {
+  // selector-string passed
+  if (typeof args === 'string') {
+    return [...document.querySelectorAll(args)].map(element => new Viscosity({element}))
+  }
+
+  // an element passed
+  if (args.tagName) {
+    return new Viscosity({element: args})
+  }
+
+  // object is passed
+  if (typeof args === 'object') {
+    return new Viscosity(args)
+  }
+
 }
