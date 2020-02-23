@@ -20,6 +20,6 @@ export default function swarm(container, amount) {
   const fragment = new DocumentFragment()
   const swarm = Array(amount).fill('')
   swarm.map(() => makeOne(fragment))
-  document.body.appendChild(container)
+  // document.body.appendChild(container)
   container.appendChild(fragment)
 }
