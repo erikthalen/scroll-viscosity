@@ -4,7 +4,7 @@
 	"description": "Like dipping the DOM in honey.",
 	"main": "src/index.js",
 	"dependencies": {
-		"imagesloaded": "^4.1.4",
+		"imagesloaded": "^4.1.4"
 	},
 	"devDependencies": {
 		"css-loader": "^3.4.2",
