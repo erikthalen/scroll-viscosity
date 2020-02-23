@@ -49,7 +49,7 @@ export default class Animation {
   removeStyle() {
     this.subject.style.removeProperty('transform')
 
-    if (this.subject.getAttribute('style')) {
+    if (!this.subject.getAttribute('style')) {
       this.subject.removeAttribute('style')
     }
   }
@@ -65,13 +65,17 @@ export default class Animation {
     observer.observe(this.subject)
   }
 
+  // bad idea to use publicly
   start() {
     this.isRunning = true
     this.update()
+    this.subject.dataset.viscosity = 'is-running'
   }
 
+  // bad idea to use publicly
   stop() {
     this.isRunning = false
     this.removeStyle()
+    this.subject.dataset.viscosity = 'is-paused'
   }
 }

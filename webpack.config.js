@@ -17,12 +17,22 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: ['style-loader', 'css-loader', 'sass-loader']
+      }, {
+        test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192
+            }
+          }
+        ]
       }
     ]
   },
   plugins: [new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'demo/index.html'),
+      template: path.resolve(__dirname, 'demo/demo.html'),
       title: 'Viscosity',
-      favicon: path.resolve(__dirname, 'demo/favicon.png')
+      favicon: path.resolve(__dirname, 'demo/honey.png')
     })]
 };

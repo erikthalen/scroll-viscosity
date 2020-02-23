@@ -24,7 +24,8 @@
 known bugs:
 
 - slight displacement of content that comes after a row of inline-block subjects.
-- the easing goes to default after resize (i think)
+- existing inline style gets removed on init
+- all existing transforms gets removed
 
 */
 
@@ -55,24 +56,25 @@ class Viscosity {
     }
 
     // reference to the original placement of the springy subject
-    this.originalStyles = getStyleRefs(this.subject)
+    this._originalStyles = getStyleRefs(this.subject)
 
     // handles the movement of the subject
-    this.animation = new Animation({element: this.subject, easing: this.easing})
+    this._animation = new Animation({element: this.subject, easing: this.easing})
 
     // handles resizing of the screen
-    this.resize = new Resize({callback: this.onResize.bind(this)})
+    new Resize({callback: this._onResize.bind(this)})
 
     // handles the element that takes up space in the dom
-    this.copycat = new Copycat({element: this.subject, styles: this.originalStyles})
+    this._copycat = new Copycat({element: this.subject, styles: this._originalStyles})
 
     // handles the styling of the subject, so it can move
-    this.costume = new Costume({element: this.subject, styles: this.originalStyles})
+    this._costume = new Costume({element: this.subject, styles: this._originalStyles})
 
     // todo: fails on first pageload
     // imagesLoaded(this.subject, this.init.bind(this))
 
     this.init()
+    // console.log(this)
   }
 
   init() {
@@ -80,43 +82,43 @@ class Viscosity {
     // wait for all Viscosity to construct, before checking
     setTimeout(() => {
       if (hasParentWithViscosity(this.subject)) {
-        this.subject.dataset.viscosity = 'controlled-by-parent'
+        this.subject.dataset.viscosity = 'is-child'
         return
       }
-      // todo: 'global' handler to save every viscous instance's style before messing with the content flow
 
-      this.costume.setup()
-      this.copycat.create()
-      this.animation.start()
+      this._costume.setup()
+      this._copycat.create()
+      this._animation.start()
+      this.subject.dataset.viscosity = 'is-running'
     })
   }
 
   // revert everything back to normal
   destroy() {
-    this.costume.revert()
-    this.copycat.remove()
-    this.animation.stop()
+    this._costume.revert()
+    this._copycat.remove()
+    this._animation.stop()
     this.subject.dataset.viscosity = 'is-destroyed'
   }
 
   // what to do on screen resize
-  onResize() {
-    if (!this.animation.isRunning)
+  _onResize() {
+    if (!this._animation.isRunning)
       return
 
     this.destroy()
 
     setTimeout(() => {
-      this.originalStyles = getStyleRefs(this.subject)
-      this.copycat.update({styles: this.originalStyles})
-      this.costume.update({styles: this.originalStyles})
+      this._originalStyles = getStyleRefs(this.subject)
+      this._copycat.update({styles: this._originalStyles})
+      this._costume.update({styles: this._originalStyles})
       this.init()
     })
   }
 
   // turn the whole thing on/off
   toggle() {
-    this.animation.isRunning
+    this._animation.isRunning
       ? this.destroy()
       : this.init()
   }

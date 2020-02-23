@@ -1,6 +1,6 @@
 # 🍯 Viscosity
 
-Makes an element react slower to scrolling,
+Makes an element react slower to scrolling,  
 like it was put into honey.
 
 ```javascript
@@ -18,4 +18,11 @@ viscosity({
 
 // with a selector
 viscosity('#viscosity')
+```
+
+## Hooks
+```javascript
+viscosity.init() // only needed after destroy() has been called
+viscosity.destroy() // remove everything related to viscosity
+viscosity.toggle() // either runs init() or destroy(), respectively
 ```

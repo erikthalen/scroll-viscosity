@@ -30,14 +30,24 @@ export default class Copycat {
   }
 
   applyStyles() {
+    const {
+      position,
+      width,
+      height,
+      display,
+      leftPos,
+      bodyMargin,
+      padding
+    } = this.styles
+
     Object.assign(this.copycat.style, {
-      position: this.styles.position !== 'static' && this.styles.position,
-      width: this.styles.width,
-      height: this.styles.height,
-      display: this.subject.tagName !== 'IMG' && this.styles.display !== 'list-item' && this.styles.display,
-      left: this.styles.leftPos !== this.styles.bodyMargin && this.styles.leftPos - this.styles.bodyMargin + 'px',
+      width,
+      height,
+      position: (position !== 'static') && position,
+      display: (this.subject.tagName !== 'IMG') && (display !== 'list-item') && display,
+      left: (leftPos !== bodyMargin) && (leftPos - bodyMargin) + 'px',
       margin: this.getMargins(),
-      padding: this.styles.padding !== '0px' && this.styles.padding
+      padding: (padding !== '0px') && padding
     })
   }
 

@@ -14,13 +14,23 @@ export default class Costume {
   }
 
   setup() {
+    const {
+      topPos,
+      paddingTop,
+      marginTop,
+      leftPos,
+      rightPos,
+      width,
+      height
+    } = this.styles
+
     Object.assign(this.subject.style, {
+      width,
+      height,
       position: "fixed",
-      top: sumAsFloat(this.styles.topPos, this.styles.paddingTop, this.styles.marginTop) + 'px',
-      left: this.styles.leftPos + 'px',
-      right: this.styles.rightPos + 'px',
-      width: this.styles.width,
-      height: this.styles.height,
+      top: sumAsFloat(topPos, paddingTop, marginTop) + 'px',
+      left: leftPos + 'px',
+      right: rightPos + 'px',
       margin: 0
     })
 
@@ -39,7 +49,7 @@ export default class Costume {
       'margin'
     ])
 
-    if (this.subject.getAttribute('style')) {
+    if (!this.subject.getAttribute('style')) {
       this.subject.removeAttribute('style')
     }
 

@@ -4,7 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"dependencies": {
-		"imagesloaded": "^4.1.4"
+		"file-loader": "^5.1.0",
+		"imagesloaded": "^4.1.4",
+		"url-loader": "^3.0.0"
 	},
 	"devDependencies": {
 		"css-loader": "^3.4.2",
