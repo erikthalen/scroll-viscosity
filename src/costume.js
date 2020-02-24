@@ -21,17 +21,18 @@ export default class Costume {
       leftPos,
       rightPos,
       width,
-      height
+      height,
+      margin
     } = this.styles
 
     Object.assign(this.subject.style, {
       width,
       height,
       position: "fixed",
-      top: sumAsFloat(topPos, paddingTop, marginTop) + 'px',
+      top: sumAsFloat(topPos, paddingTop) + 'px',
       left: leftPos + 'px',
       right: rightPos + 'px',
-      margin: 0
+      margin: margin !== '0px' && margin
     })
 
     if (this.child)
@@ -48,6 +49,8 @@ export default class Costume {
       'height',
       'margin'
     ])
+
+    this.subject.style.cssText = this.styles.inline
 
     if (!this.subject.getAttribute('style')) {
       this.subject.removeAttribute('style')

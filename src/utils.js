@@ -1,3 +1,5 @@
+const asFloat = x => parseFloat(x)
+
 // helper to get a style property
 export const getStyleStr = (el, prop) => {
   return window.getComputedStyle(el)[prop]
@@ -47,6 +49,8 @@ export const placementStyleProps = [
 export const getStyleRefs = (el) => {
   const obj = {}
   placementStyleProps.forEach(style => (obj[style] = getStyleStr(el, style)))
+  obj.transform = getStyleStr(el, 'transform').split(/[(,)]+/).filter(Boolean).map(asFloat)
+  obj.inline = el.style.cssText
   obj.topPos = el.getBoundingClientRect().top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) - parseFloat(getStyleStr(el, 'paddingTop'))
   obj.leftPos = el.getBoundingClientRect().left
   obj.rightPos = el.getBoundingClientRect().right

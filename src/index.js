@@ -24,8 +24,9 @@
 known bugs:
 
 - slight displacement of content that comes after a row of inline-block subjects.
-- existing inline style gets removed on init
-- all existing transforms gets removed
+- existing transforms gets applied wrong
+- style isn't updated when going: destroy() -> resize window -> init()
+- swarm bee's copycat is placed wrong
 
 */
 
@@ -59,10 +60,7 @@ class Viscosity {
     this._originalStyles = getStyleRefs(this.subject)
 
     // handles the movement of the subject
-    this._animation = new Animation({element: this.subject, easing: this.easing})
-
-    // handles resizing of the screen
-    new Resize({callback: this._onResize.bind(this)})
+    this._animation = new Animation({element: this.subject, styles: this._originalStyles, easing: this.easing})
 
     // handles the element that takes up space in the dom
     this._copycat = new Copycat({element: this.subject, styles: this._originalStyles})
@@ -74,7 +72,7 @@ class Viscosity {
     // imagesLoaded(this.subject, this.init.bind(this))
 
     this.init()
-    // console.log(this)
+    new Resize({callback: this._onResize.bind(this)})
   }
 
   init() {
@@ -103,6 +101,8 @@ class Viscosity {
 
   // what to do on screen resize
   _onResize() {
+    this._originalStyles = getStyleRefs(this.subject)
+
     if (!this._animation.isRunning)
       return
 

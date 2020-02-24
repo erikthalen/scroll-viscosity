@@ -5,8 +5,9 @@
  */
 
 export default class Animation {
-  constructor({element, easing}) {
+  constructor({element, styles, easing}) {
     this.subject = element
+    this.styles = styles
     this.easing = easing
 
     this.isRunning = false
@@ -43,7 +44,14 @@ export default class Animation {
   }
 
   setStyle() {
-    this.subject.style.transform = `translate3d(0, ${this.currentPosition}px, 0)`
+    const t = this.styles.transform
+    if (t.length > 1) {
+      // merge existing transform styling
+      this.subject.style.transform = `matrix(${t[1]}, ${t[2]}, ${t[3]}, ${t[4]}, ${t[5]}, ${t[6] + this.currentPosition})`
+    } else {
+      // subject had no existing transform
+      this.subject.style.transform = `translate3d(0, ${this.currentPosition}px, 0)`
+    }
   }
 
   removeStyle() {
@@ -68,6 +76,7 @@ export default class Animation {
   // bad idea to use publicly
   start() {
     this.isRunning = true
+    this.setCurrentPos()
     this.update()
     this.subject.dataset.viscosity = 'is-running'
   }

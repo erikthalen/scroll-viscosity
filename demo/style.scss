@@ -11,12 +11,40 @@ a {
 }
 
 header {
-	background: #e3ffe7;
+	// background: #e3ffe7;
 	position: fixed;
 	top: 0;
 	left: 0;
 	padding: 20px;
 	z-index: 1;
+	color: #333;
+}
+
+input {
+	opacity: 0;
+	position: absolute;
+	pointer-events: none;
+
+	&:checked + label:after {
+		opacity: 1;
+	}
+}
+
+label {
+	position: relative;
+	user-select: none;
+
+	&:after {
+		opacity: 0;
+		content: "";
+		height: 0.3em;
+		width: 120%;
+		background-color: currentColor;
+		position: absolute;
+		left: -10%;
+		top: 50%;
+		transform: translateY(-50%) rotate(-10deg);
+	}
 }
 
 .title {
@@ -79,7 +107,6 @@ p {
 	background: #fee;
 	padding: 40px;
 }
-
 // img:not(.big) {
 // 	width: 500px;
 // 	height: auto;
@@ -111,7 +138,6 @@ p {
 	}
 }
 
-
 section {
 	height: 80vh;
 	margin-bottom: 15vh;
@@ -138,11 +164,12 @@ section {
 		}
 	}
 
-	h1, a {
+	a,
+	h1 {
 		font-weight: bold;
 		font-size: 150px;
-		margin: 0;
-		margin-top: -25px;
+		margin: -25px 0 0;
+		text-decoration: none;
 	}
 
 	p {
@@ -151,6 +178,7 @@ section {
 
 	img {
 		width: 200px;
+		z-index: 2;
 	}
 
 	.badge {
@@ -160,10 +188,9 @@ section {
 		font-size: 50px;
 		transform: rotate(-15deg);
 		z-index: 2;
-		border: .2em solid;
-		padding: .2em;
-
-		opacity: .8;
+		border: 0.2em solid;
+		padding: 0.2em;
+		opacity: 0.8;
 	}
 
 	&.swarm {

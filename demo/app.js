@@ -11,11 +11,12 @@ import swarm from './swarm'
 // init
 imagesLoaded('body', () => {
   swarm(document.querySelector('.swarm'), 50)
-  
-  const els = [...document.body.querySelectorAll('.viscosity')]
-  const Vs = els.map(el => viscosity({element: el, easing: el.dataset.amount}))
+  setTimeout(() => {
+    const els = [...document.body.querySelectorAll('.viscosity')]
+    const Vs = els.map(el => viscosity({element: el, easing: el.dataset.amount}))
+	ui(Vs) // activate ui elements
+  }, 1000)
 
   // used for troubleshooting
   // ruler(100)  create visual 'ruler'
-  // ui(Vs)  activate ui elements
 })

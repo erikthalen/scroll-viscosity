@@ -36,6 +36,7 @@ export default class Copycat {
       height,
       display,
       leftPos,
+      topPos,
       bodyMargin,
       padding
     } = this.styles
@@ -45,7 +46,8 @@ export default class Copycat {
       height,
       position: (position !== 'static') && position,
       display: (this.subject.tagName !== 'IMG') && (display !== 'list-item') && display,
-      left: (leftPos !== bodyMargin) && (leftPos - bodyMargin) + 'px',
+      left: leftPos + 'px', //(leftPos !== bodyMargin) && (leftPos - bodyMargin) + 'px',
+      top: topPos + 'px',
       margin: this.getMargins(),
       padding: (padding !== '0px') && padding
     })
