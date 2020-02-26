@@ -1,4 +1,4 @@
-# 🍯 Viscosity
+# 🍯 [wip] Viscosity
 
 Makes an element react slower to scrolling,  
 like it was put into honey.
