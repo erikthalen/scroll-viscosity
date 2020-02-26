@@ -23,10 +23,10 @@
 /**
 known bugs:
 
-- slight displacement of content that comes after a row of inline-block subjects.
+- slight displacement of content that comes after a row of inline-block subjects. (not prio)
+
 - existing transforms gets applied wrong
-- style isn't updated when going: destroy() -> resize window -> init()
-- swarm bee's copycat is placed wrong
+- transforms not set back on destroy
 
 */
 
@@ -101,19 +101,19 @@ class Viscosity {
 
   // what to do on screen resize
   _onResize() {
-    this._originalStyles = getStyleRefs(this.subject)
-
-    if (!this._animation.isRunning)
-      return
-
-    this.destroy()
-
     setTimeout(() => {
       this._originalStyles = getStyleRefs(this.subject)
       this._copycat.update({styles: this._originalStyles})
       this._costume.update({styles: this._originalStyles})
-      this.init()
     })
+
+    if (this._animation.isRunning) {
+      this.destroy()
+
+      setTimeout(() => {
+        this.init()
+      })
+    }
   }
 
   // turn the whole thing on/off

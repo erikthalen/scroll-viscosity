@@ -18,11 +18,13 @@ export default class Costume {
       topPos,
       paddingTop,
       marginTop,
+      marginLeft,
       leftPos,
       rightPos,
       width,
       height,
-      margin
+      margin,
+      bodyMargin
     } = this.styles
 
     Object.assign(this.subject.style, {
@@ -30,7 +32,7 @@ export default class Costume {
       height,
       position: "fixed",
       top: sumAsFloat(topPos, paddingTop) + 'px',
-      left: leftPos + 'px',
+      left: leftPos - parseFloat(marginLeft) + 'px',
       right: rightPos + 'px',
       margin: margin !== '0px' && margin
     })

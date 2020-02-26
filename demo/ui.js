@@ -1,6 +1,6 @@
 export default function ui(Vs) {
   // const toggle = e => Springies.forEach(s => s.toggle())
-  const toggleEl = document.querySelector(".toggle-viscosity")
+  const toggleEl = document.querySelector(".toggle-effect")
   if (toggleEl)
     toggleEl.addEventListener("change", () => Vs.forEach(s => s.toggle()))
 

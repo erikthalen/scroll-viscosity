@@ -8,8 +8,8 @@ export default class Copycat {
 
     // relevant for inline-styled subjects
     this.child = this.subject.firstElementChild
-    this.isCollapsing = getStyleStr(this.subject, `display`).includes('inline')
-    this.isChildCollapsing = this.child && getStyleStr(this.child, `display`).includes('inline')
+    this.isCollapsing = this.checkForInlineStyle()
+
   }
 
   // setup the subject that will take up space in the dom tree
@@ -46,8 +46,8 @@ export default class Copycat {
       height,
       position: (position !== 'static') && position,
       display: (this.subject.tagName !== 'IMG') && (display !== 'list-item') && display,
-      left: leftPos + 'px', //(leftPos !== bodyMargin) && (leftPos - bodyMargin) + 'px',
-      top: topPos + 'px',
+      left: (this.styles.position === 'absolute') ? leftPos - bodyMargin : leftPos + 'px',
+      top: this.accounted(topPos) + 'px',
       margin: this.getMargins(),
       padding: (padding !== '0px') && padding
     })
@@ -58,8 +58,9 @@ export default class Copycat {
   }
 
   getMargin(direction) {
-    if (this.isChildCollapsing || this.isCollapsing)
+    if (this.isCollapsing) {
       return parseFloat(this.styles[`margin${direction}`])
+    }
 
     return Math.max(parseFloat(this.styles[`margin${direction}`]), parseFloat(this.getChildMargin(direction))) + 'px'
   }
@@ -68,5 +69,17 @@ export default class Copycat {
     return this.child
       ? parseFloat(getStyleStr(this.child, `margin${direction}`))
       : 0
+  }
+
+  accounted(topPos) {
+    return this.isCollapsing
+      ? topPos + this.styles.bodyMargin
+      : (this.styles.position === 'absolute')
+        ? parseFloat(this.styles.top)
+        : topPos
+  }
+
+  checkForInlineStyle() {
+    return getStyleStr(this.subject, `display`).includes('inline') || (this.child && getStyleStr(this.child, `display`).includes('inline') && this.child.tagName !== 'IMG')
   }
 }

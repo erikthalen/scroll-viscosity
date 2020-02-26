@@ -47,6 +47,10 @@ label {
 	}
 }
 
+img {
+	max-width: 300px;
+}
+
 .title {
 	padding-top: 200px;
 }
@@ -76,7 +80,7 @@ p {
 
 .odd-margins {
 	margin: 5vw;
-	display: inline-block;
+	// display: inline-block;
 
 	h1 + h1 {
 		display: inline-block;
@@ -146,6 +150,24 @@ section {
 	align-items: center;
 	justify-content: center;
 
+	&.horizontal {
+		flex-direction: row;
+	}
+
+	.half {
+		position: absolute;
+		padding: 3em;
+		max-width: 25em;
+
+		p{
+			margin-bottom: 1em;
+		}
+	}
+
+	.faded {
+		opacity: .1;
+	}
+
 	.bee {
 		position: absolute;
 		z-index: 1;
@@ -170,6 +192,10 @@ section {
 		font-size: 150px;
 		margin: -25px 0 0;
 		text-decoration: none;
+	}
+
+	h2 {
+		font-size: 32px;
 	}
 
 	p {
@@ -202,4 +228,8 @@ section {
 			height: auto;
 		}
 	}
+}
+
+.text-black {
+	color: #333;
 }
