@@ -4,7 +4,6 @@
  * Erik Thalén - erikthalen.com
  */
 
-// todo: consider having an onload handler integrated in the plugin
 // todo: loads of (boring) integration tests 👀
 // todo: publish 🥂🍾
 
@@ -30,8 +29,7 @@ known bugs:
 
 */
 
-import imagesLoaded from 'imagesloaded'
-
+import ImagesLoaded from './images-loaded'
 import Animation from './animation'
 import Resize from './resize'
 import Copycat from './copycat'
@@ -59,6 +57,7 @@ class Viscosity {
     // reference to the original placement of the springy subject
     this._originalStyles = getStyleRefs(this.subject)
 
+
     // handles the movement of the subject
     this._animation = new Animation({element: this.subject, styles: this._originalStyles, easing: this.easing})
 
@@ -68,10 +67,8 @@ class Viscosity {
     // handles the styling of the subject, so it can move
     this._costume = new Costume({element: this.subject, styles: this._originalStyles})
 
-    // todo: fails on first pageload
-    // imagesLoaded(this.subject, this.init.bind(this))
-
-    this.init()
+	// handles the status if any images are loaded or not
+	new ImagesLoaded({element: this.subject, callback: this.init.bind(this)})
     new Resize({callback: this._onResize.bind(this)})
   }
 

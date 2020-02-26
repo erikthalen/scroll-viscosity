@@ -6,7 +6,7 @@ const makeOne = (fragment) => {
   img.src = beeImg
 
   Object.assign(img.style, {
-    top: Math.random() * (window.innerHeight / (window.innerHeight / 100)) * .7 + '%',
+    top: Math.random() * (window.innerHeight / (window.innerHeight / 100)) + '%',
     left: Math.random() * (window.innerWidth / (window.innerWidth / 100)) * .95 + 2 + '%',
     width: size,
     height: size,
