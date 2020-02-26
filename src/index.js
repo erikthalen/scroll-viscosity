@@ -4,6 +4,7 @@
  * Erik Thalén - erikthalen.com
  */
 
+// what happens if one image is slow and one fast? regarding placement in dom
 // todo: loads of (boring) integration tests 👀
 // todo: publish 🥂🍾
 
@@ -26,6 +27,7 @@ known bugs:
 
 - existing transforms gets applied wrong
 - transforms not set back on destroy
+- strange behaviour after loads of resizes
 
 */
 

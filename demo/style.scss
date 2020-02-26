@@ -81,7 +81,6 @@ p {
 .odd-margins {
 	margin: 5vw;
 	// display: inline-block;
-
 	h1 + h1 {
 		display: inline-block;
 	}
@@ -159,13 +158,13 @@ section {
 		padding: 3em;
 		max-width: 25em;
 
-		p{
+		p {
 			margin-bottom: 1em;
 		}
 	}
 
 	.faded {
-		opacity: .1;
+		opacity: 0.15;
 	}
 
 	.bee {
@@ -190,8 +189,12 @@ section {
 	h1 {
 		font-weight: bold;
 		font-size: 150px;
-		margin: -25px 0 0;
+		margin: -.2em 0 0;
 		text-decoration: none;
+
+		@media screen and (max-width: 840px) {
+			font-size: 17vw;
+		}
 	}
 
 	h2 {
@@ -203,7 +206,7 @@ section {
 	}
 
 	img {
-		width: 200px;
+		max-width: 200px;
 		z-index: 2;
 	}
 
@@ -232,4 +235,9 @@ section {
 
 .text-black {
 	color: #333;
+}
+
+.red {
+	color: #ff1d04;
+	opacity: 0.8;
 }
