@@ -5,7 +5,7 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'demo'),
     compress: true,
-    port: 9000
+    port: 9002
   },
   entry: './demo/app.js',
   output: {

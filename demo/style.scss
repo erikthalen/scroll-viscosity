@@ -11,7 +11,6 @@ a {
 }
 
 header {
-	// background: #e3ffe7;
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -25,7 +24,7 @@ input {
 	position: absolute;
 	pointer-events: none;
 
-	&:checked + label:after {
+	&:checked+label:after {
 		opacity: 1;
 	}
 }
@@ -42,102 +41,8 @@ label {
 		background-color: currentColor;
 		position: absolute;
 		left: -10%;
-		top: 50%;
+		top: 45%;
 		transform: translateY(-50%) rotate(-10deg);
-	}
-}
-
-img {
-	max-width: 300px;
-}
-
-.title {
-	padding-top: 200px;
-}
-
-p {
-	margin: 0;
-}
-
-.relative {
-	position: relative;
-	width: 100%;
-	height: 550px;
-}
-
-.absolute {
-	position: absolute;
-	right: 0;
-}
-
-.max-width {
-	max-width: 300px;
-}
-
-.margin {
-	margin: 2em;
-}
-
-.odd-margins {
-	margin: 5vw;
-	// display: inline-block;
-	h1 + h1 {
-		display: inline-block;
-	}
-}
-
-.padding {
-	padding: 2em;
-}
-
-.container {
-	margin: 20px;
-	background: rgba(0, 0, 255, 0.1);
-}
-
-.small {
-	width: 50%;
-	max-width: none;
-}
-
-.flex {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-}
-
-.background {
-	background: #fee;
-	padding: 40px;
-}
-// img:not(.big) {
-// 	width: 500px;
-// 	height: auto;
-// }
-
-.big {
-	height: 75vh;
-	width: auto;
-}
-
-.borders {
-	.viscosity {
-		outline: 1px solid rgba(0, 0, 255, 0.2);
-	}
-
-	.viscosity-copycat {
-		outline: 1px solid rgba(255, 0, 0, 0.2);
-	}
-}
-
-#ruler {
-	pointer-events: none;
-	opacity: 0;
-}
-
-.ruler {
-	#ruler {
-		opacity: 1;
 	}
 }
 
@@ -160,11 +65,8 @@ section {
 
 		p {
 			margin-bottom: 1em;
+			text-align: left;
 		}
-	}
-
-	.faded {
-		opacity: 0.15;
 	}
 
 	.bee {
@@ -202,24 +104,15 @@ section {
 	}
 
 	p {
+		margin: 0;
 		font-size: 25px;
+		width: 100%;
+		text-align: center;
 	}
 
 	img {
 		max-width: 200px;
 		z-index: 2;
-	}
-
-	.badge {
-		color: #ff1d04;
-		text-transform: uppercase;
-		position: absolute;
-		font-size: 50px;
-		transform: rotate(-15deg);
-		z-index: 2;
-		border: 0.2em solid;
-		padding: 0.2em;
-		opacity: 0.8;
 	}
 
 	&.swarm {
@@ -241,3 +134,40 @@ section {
 	color: #ff1d04;
 	opacity: 0.8;
 }
+
+.faded {
+	opacity: 0.15;
+}
+
+.borders {
+	.viscosity {
+		outline: 1px solid rgba(0, 0, 255, 0.2);
+	}
+
+	.viscosity-copycat {
+		outline: 1px solid rgba(255, 0, 0, 0.2);
+	}
+}
+
+#ruler {
+	pointer-events: none;
+	opacity: 0;
+}
+
+.ruler {
+	#ruler {
+		opacity: 1;
+	}
+}
+
+// .badge {
+// 	color: #ff1d04;
+// 	text-transform: uppercase;
+// 	position: absolute;
+// 	font-size: 50px;
+// 	transform: rotate(-15deg);
+// 	z-index: 2;
+// 	border: 0.2em solid;
+// 	padding: 0.2em;
+// 	opacity: 0.8;
+// }

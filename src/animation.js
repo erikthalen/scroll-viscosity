@@ -73,7 +73,7 @@ export default class Animation {
     observer.observe(this.subject)
   }
 
-  // bad idea to use publicly
+  // bad idea to use as public
   start() {
     this.isRunning = true
     this.setCurrentPos()
@@ -81,7 +81,7 @@ export default class Animation {
     this.subject.dataset.viscosity = 'is-running'
   }
 
-  // bad idea to use publicly
+  // bad idea to use as public
   stop() {
     this.isRunning = false
     this.removeStyle()

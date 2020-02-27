@@ -22,7 +22,7 @@ viscosity('#viscosity')
 
 ## Hooks
 ```javascript
-viscosity.init() // only needed after destroy() has been called
 viscosity.destroy() // remove everything related to viscosity
+viscosity.init() // only needed after destroy() has been called
 viscosity.toggle() // either runs init() or destroy(), respectively
 ```
