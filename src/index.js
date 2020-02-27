@@ -32,56 +32,28 @@ known bugs:
 
 */
 
-import ImagesLoaded from "./images-loaded";
+import {ImagesLoaded, FontsLoaded} from "./assets-loaded";
 import Animation from "./animation";
-import Resize from "./resize";
+import onResize from "./resize";
 import Copycat from "./copycat";
-import Costume from "./costume";
+import SubjectStyling from "./subject-styling";
 
-import { hasParentWithViscosity, getStyleRefs } from "./utils";
+import {hasParentWithViscosity, getStyleRefs, randomInt} from "./utils";
 
 class Viscosity {
-  constructor({ element, easing, wacky }) {
+  constructor({element, easing, wacky}) {
     this.subject = element;
     this.easing = wacky
-      ? (Math.random() * 1.5 + 0.5) / 10 // 0.05 - 0.2
-      : easing
-      ? easing
-      : 0.3;
-
-    this.subject.dataset.viscosity = "is-bound";
+      ? randomInt(.05, .2)
+      : easing || .3
 
     if (!this.subject) {
       return;
     }
 
-    // reference to the original placement of the springy subject
-    this._originalStyles = getStyleRefs(this.subject);
+    this.originalPlacement = getStyleRefs(this.subject);
+    this.subject.dataset.viscosity = "is-bound";
 
-    // handles the movement of the subject
-    this._animation = new Animation({
-      element: this.subject,
-      styles: this._originalStyles,
-      easing: this.easing
-    });
-
-    // handles the element that takes up space in the dom
-    this._copycat = new Copycat({
-      element: this.subject,
-      styles: this._originalStyles
-    });
-
-    // handles the styling of the subject, so it can move
-    this._costume = new Costume({
-      element: this.subject,
-      styles: this._originalStyles
-    });
-
-    new ImagesLoaded({ element: this.subject, callback: this.init.bind(this) });
-    new Resize({ callback: this._onResize.bind(this) });
-  }
-
-  init() {
     // todo: better callback, not using time
     // wait for all Viscosity to construct, before checking
     setTimeout(() => {
@@ -89,31 +61,35 @@ class Viscosity {
         this.subject.dataset.viscosity = "is-child";
         return;
       }
-
-      this._costume.setup();
-      this._copycat.create();
-      this._animation.start();
-      this.subject.dataset.viscosity = "is-running";
+      ImagesLoaded(this).then(FontsLoaded).then(this.init.bind(this))
     });
+
+    onResize(this._onResize.bind(this));
+  }
+
+  init() {
+    SubjectStyling.setup(this);
+    Copycat.create(this);
+    Animation.start(this);
+    this.subject.dataset.viscosity = "is-running";
   }
 
   // revert everything back to normal
   destroy() {
-    this._costume.revert();
-    this._copycat.remove();
-    this._animation.stop();
+    SubjectStyling.revert(this)
+    Copycat.remove(this);
+    Animation.stop(this);
     this.subject.dataset.viscosity = "is-destroyed";
   }
 
   // what to do on screen resize
   _onResize() {
     setTimeout(() => {
-      this._originalStyles = getStyleRefs(this.subject);
-      this._copycat.update({ styles: this._originalStyles });
-      this._costume.update({ styles: this._originalStyles });
+      this.originalPlacement = getStyleRefs(this.subject);
+      Copycat.applyStyles(this);
     });
 
-    if (this._animation.isRunning) {
+    if (this.isRunning) {
       this.destroy();
 
       setTimeout(() => {
@@ -124,21 +100,21 @@ class Viscosity {
 
   // turn the whole thing on/off
   toggle() {
-    this._animation.isRunning ? this.destroy() : this.init();
+    this.isRunning
+      ? this.destroy()
+      : this.init();
   }
 }
 
 export default function(args) {
   // selector-string passed
   if (typeof args === "string") {
-    return [...document.querySelectorAll(args)].map(
-      element => new Viscosity({ element })
-    );
+    return [...document.querySelectorAll(args)].map(element => new Viscosity({element}));
   }
 
   // an element passed
   if (args.tagName) {
-    return new Viscosity({ element: args });
+    return new Viscosity({element: args});
   }
 
   // object is passed

@@ -12,13 +12,16 @@ const makeOne = (fragment) => {
     height: size,
     transform: (Math.random() > .5) && 'scaleX(-1)'
   })
-  
+
   img.classList.add('viscosity')
   img.dataset.amount = (Math.random() * 1.5 + .5) / 10
   fragment.appendChild(img)
 }
 
 export default function swarm(container, amount) {
+  if (!container)
+    return
+
   const fragment = new DocumentFragment()
   const swarm = Array(amount).fill('')
   swarm.map(() => makeOne(fragment))

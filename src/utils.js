@@ -1,13 +1,21 @@
 const asFloat = x => parseFloat(x)
 
+export const lerp = (start, end, amt) => (1 - amt) * start + amt * end
+
+export const randomInt = (from, to) => (Math.random() * (to - from) + from)
+
 // helper to get a style property
 export const getStyleStr = (el, prop) => {
   return window.getComputedStyle(el)[prop]
 }
 
 // removes all passed inline style properties, from springy-element
-export const removeInlineStyles = (el, props) => {
+export const removeInlineStyles = (el, ...props) => {
   props.forEach(prop => el.style.removeProperty(prop))
+
+  if (!el.getAttribute('style')) {
+    el.removeAttribute('style')
+  }
 }
 
 // places source, after target in the dom tree
@@ -68,4 +76,17 @@ export const hasParentWithViscosity = (el, count = 0) => {
       : (el.dataset.viscosity)
         ? hasParentWithViscosity(el.parentElement, count + 1)
         : hasParentWithViscosity(el.parentElement, count)
+}
+
+export const isInline = (el) => {
+  return getStyleStr(el, `display`).includes("inline");
+}
+
+export const isImage = (el) => {
+  return el.tagName === "IMG";
+}
+
+export const checkForInlineStyle = (el) => {
+  const firstChild = el.firstElementChild
+  return (isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild)));
 }

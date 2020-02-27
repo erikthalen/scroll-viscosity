@@ -1,19 +1,14 @@
 /**
- * runs a callback on resize
- * useing an easy debounce timer
+ * debounced callback
  */
+export default function Resize(callback) {
+  let resizeTimer = null
 
-export default class Resize {
-  constructor({callback}) {
-    this.callback = callback
-    this.resizeTimer = null
+  window.addEventListener("resize", e => {
+    clearTimeout(resizeTimer) // quick and dirty debounce
 
-    window.addEventListener("resize", e => {
-      clearTimeout(this.resizeTimer) // quick and dirty debounce
-
-      this.resizeTimer = setTimeout(() => {
-        this.callback()
-      }, 250)
-    })
-  }
+    resizeTimer = setTimeout(() => {
+      callback()
+    }, 250)
+  })
 }

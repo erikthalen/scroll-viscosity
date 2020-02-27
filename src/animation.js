@@ -1,90 +1,58 @@
+import {lerp, removeInlineStyles} from './utils'
+
 /**
  * handles the funny part
  *
  * can be set to on/off
  */
+export default {
+  isInView: true, // this one gotta go into viscosity
 
-export default class Animation {
-  constructor({element, styles, easing}) {
-    this.subject = element
-    this.styles = styles
-    this.easing = easing
-
-    this.isRunning = false
-    this.isInView = true
-    this.setCurrentPos()
-    // this.startObserve()
-  }
-
-  lerp(start, end, amt) {
-    return (1 - amt) * start + amt * end
-  }
-
-  update() {
-    if (!this.isRunning)
+  update(viscosity, position = (window.pageYOffset * -1)) {
+    if (!viscosity.isRunning)
       return
 
-    requestAnimationFrame(this.update.bind(this))
+    requestAnimationFrame(() => this.update(viscosity, position))
 
-    this.currentPosition = this.isInView
-      ? this.lerp(this.currentPosition, // ease from
-          this.getCurrentPos(), // to
-          this.easing) // by amount
-      : this.getCurrentPos()
+    position = this.isInView
+      ? lerp(position, // ease from
+          window.pageYOffset * -1, // to
+          viscosity.easing) // by amount
+      : window.pageYOffset * -1
 
-    this.setStyle()
-  }
+    this.setStyle(viscosity, position)
+  },
 
-  getCurrentPos() {
-    return window.pageYOffset * -1
-  }
-
-  setCurrentPos() {
-    this.currentPosition = this.getCurrentPos()
-  }
-
-  setStyle() {
-    const t = this.styles.transform
+  setStyle(viscosity, position) {
+    const t = viscosity.originalPlacement.transform
     if (t.length > 1) {
       // merge existing transform styling
-      this.subject.style.transform = `matrix(${t[1]}, ${t[2]}, ${t[3]}, ${t[4]}, ${t[5]}, ${t[6] + this.currentPosition})`
+      viscosity.subject.style.transform = `matrix(${t[1]}, ${t[2]}, ${t[3]}, ${t[4]}, ${t[5]}, ${t[6] + position})`
     } else {
       // subject had no existing transform
-      this.subject.style.transform = `translate3d(0, ${this.currentPosition}px, 0)`
+      viscosity.subject.style.transform = `translate3d(0, ${position}px, 0)`
     }
-  }
-
-  removeStyle() {
-    this.subject.style.removeProperty('transform')
-
-    if (!this.subject.getAttribute('style')) {
-      this.subject.removeAttribute('style')
-    }
-  }
+  },
 
   // note: does this do much? for performance
-  startObserve() {
-    let callback = (entries, observer) => {
-      entries.map(entry => {
-        this.isInView = entry.isIntersecting
-      })
-    }
-    let observer = new IntersectionObserver(callback)
-    observer.observe(this.subject)
-  }
+  // startObserve() {
+  //   let callback = (entries, observer) => {
+  //     entries.map(entry => {
+  //       this.isInView = entry.isIntersecting
+  //     })
+  //   }
+  //   let observer = new IntersectionObserver(callback)
+  //   observer.observe(this.subject)
+  // },
 
-  // bad idea to use as public
-  start() {
-    this.isRunning = true
-    this.setCurrentPos()
-    this.update()
-    this.subject.dataset.viscosity = 'is-running'
-  }
+  start(viscosity) {
+    viscosity.isRunning = true
+    this.currentPosition = window.pageYOffset * -1
+    this.update(viscosity)
+  },
 
-  // bad idea to use as public
-  stop() {
-    this.isRunning = false
-    this.removeStyle()
-    this.subject.dataset.viscosity = 'is-paused'
+  stop(viscosity) {
+    viscosity.isRunning = false
+    removeInlineStyles(viscosity.subject, 'transform')
   }
 }
