@@ -17,14 +17,12 @@ export default class Costume {
     const {
       topPos,
       paddingTop,
-      marginTop,
       marginLeft,
       leftPos,
       rightPos,
       width,
       height,
       margin,
-      bodyMargin
     } = this.styles
 
     Object.assign(this.subject.style, {

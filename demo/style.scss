@@ -58,6 +58,16 @@ section {
 		flex-direction: row;
 	}
 
+	&.backdrop {
+		&:after {
+			content: "example";
+			font-size: 20vw;
+			color: #ffd404;
+			opacity: .1;
+			z-index: -1;
+		}
+	}
+
 	.half {
 		position: absolute;
 		padding: 3em;

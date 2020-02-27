@@ -28,6 +28,7 @@ known bugs:
 - existing transforms gets applied wrong
 - transforms not set back on destroy (scale tested)
 - strange behaviour after loads of resizes
+- wrong placement when fonts aren't loaded
 
 */
 
@@ -41,8 +42,7 @@ import { hasParentWithViscosity, getStyleRefs } from "./utils";
 
 class Viscosity {
   constructor({ element, easing, wacky }) {
-    this.subject =
-      typeof element === "string" ? document.querySelector(element) : element;
+    this.subject = element;
     this.easing = wacky
       ? (Math.random() * 1.5 + 0.5) / 10 // 0.05 - 0.2
       : easing
