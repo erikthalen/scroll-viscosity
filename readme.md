@@ -24,12 +24,10 @@ viscosity('#viscosity')
 ## Options
 Available when initializing with an object
 
-```javascript
 | Name   | type      | Default | Description                                        |
 | ------ | --------- | ------- | -------------------------------------------------- |
 | easing | {Number}  | 0.3     | How fast the element comes back in place           |
 | wacky  | {Boolean} | false   | Gives the element a random easing between .05 - .2 |
-```
 
 ## Hooks
 ```javascript
