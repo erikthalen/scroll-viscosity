@@ -1,92 +1,158 @@
-const asFloat = x => parseFloat(x)
+/**
+ * Number fns
+ */
 
-export const lerp = (start, end, amt) => (1 - amt) * start + amt * end
 
-export const randomInt = (from, to) => (Math.random() * (to - from) + from)
+ /**
+  * Convert X to float
+  */
+const asFloat = x => parseFloat(x);
 
-// helper to get a style property
-export const getStyleStr = (el, prop) => {
-  return window.getComputedStyle(el)[prop]
-}
+/**
+ * Easing function
+ */
+export const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
 
-// removes all passed inline style properties, from springy-element
-export const removeInlineStyles = (el, ...props) => {
-  props.forEach(prop => el.style.removeProperty(prop))
 
-  if (!el.getAttribute('style')) {
-    el.removeAttribute('style')
-  }
-}
+/**
+ * returns a random number within range
+ * @param {number} from min value
+ * @param {number} to max value
+ */
+export const randomInt = (from, to) => Math.random() * (to - from) + from;
 
-// places source, after target in the dom tree
-export const appendAfter = (source) => {
-  return target => {
-    target.parentNode.insertBefore(source, target.nextSibling)
-  }
-}
 
-// returns sum of all arguments, as float value
-// counts 'auto' as 0
+/**
+ * Converts strings to numbers, and sums them
+ * @param  {...string/number} xs what to sum up
+ */
 export const sumAsFloat = (...xs) => {
   return xs.reduce((x, cur) => {
-    if (cur === 'auto') {
-      cur = 0
+    if (cur === "auto") {
+      cur = 0;
     }
-    return x = x + parseFloat(cur)
-  }, 0)
-}
+    return (x = x + parseFloat(cur));
+  }, 0);
+};
 
+
+
+/**
+ * Get/Set dom fns 
+ */
+
+/**
+ * 
+ * @param {dom-element} el element to check
+ * @param {string} prop property to check
+ * @returns {string}
+ */
+export const getStyleStr = (el, prop) => window.getComputedStyle(el)[prop];
+
+
+/**
+ * @param {dom-element} el element to remove style from
+ * @param  {...string} props styles to remove
+ */
+export const removeInlineStyles = (el, ...props) => {
+  props.forEach(prop => el.style.removeProperty(prop));
+
+  if (!el.getAttribute("style")) {
+    el.removeAttribute("style");
+  }
+};
+
+/**
+ * curried fn that places source just after target in the dom
+ * @param {dom-element} source what to place in the dom
+ */
+export const appendAfter = source => {
+  return target => {
+    target.parentNode.insertBefore(source, target.nextSibling);
+  };
+};
+
+/**
+ * Style properties related to this program
+ */
 export const placementStyleProps = [
-  'position',
-  'top',
-  'left',
-  'right',
-  'width',
-  'height',
-  'display',
-  'transform',
-  'marginTop',
-  'marginBottom',
-  'marginLeft',
-  'marginRight',
-  'paddingTop',
-  'margin',
-  'padding'
-]
+  "position",
+  "top",
+  "left",
+  "right",
+  "width",
+  "height",
+  "display",
+  "transform",
+  "marginTop",
+  "marginBottom",
+  "marginLeft",
+  "marginRight",
+  "paddingTop",
+  "margin",
+  "padding"
+];
 
-export const getStyleRefs = (el) => {
-  const obj = {}
-  placementStyleProps.forEach(style => (obj[style] = getStyleStr(el, style)))
-  obj.transform = getStyleStr(el, 'transform').split(/[(,)]+/).filter(Boolean).map(asFloat)
-  obj.inline = el.style.cssText
-  obj.topPos = el.getBoundingClientRect().top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) - parseFloat(getStyleStr(el, 'paddingTop'))
-  obj.leftPos = el.getBoundingClientRect().left
-  obj.rightPos = el.getBoundingClientRect().right
-  obj.bodyMargin = parseFloat(getStyleStr(document.body, 'marginLeft'))
-  return obj
-}
+// fuck this mess
+export const getStyleRefs = el => {
+  const obj = {};
+  placementStyleProps.forEach(style => (obj[style] = getStyleStr(el, style)));
+  obj.transform = getStyleStr(el, "transform")
+    .split(/[(,)]+/)
+    .filter(Boolean)
+    .map(asFloat);
+  obj.inline = el.style.cssText;
+  obj.topPos =
+    el.getBoundingClientRect().top +
+    window.pageYOffset -
+    parseFloat(getStyleStr(el, "marginTop")) -
+    parseFloat(getStyleStr(el, "paddingTop"));
+  obj.leftPos = el.getBoundingClientRect().left;
+  obj.rightPos = el.getBoundingClientRect().right;
+  obj.bodyMargin = parseFloat(getStyleStr(document.body, "marginLeft"));
+  return obj;
+};
 
-export const hasParentWithViscosity = (el, count = 0) => {
-  // there should not be more than one instance of viscosity active at once,
-  // on each element
-  return (el === document.body && count < 2)
+
+/**
+ * Traverses the dom upwards and checks for a certain data-attribute
+ * @param {string} attribute data-attribute to check
+ * @param {dom-element} el elements to start from
+ * @param {number} count amount of times the attribute been seen
+ * @return {boolean} if an ancestor has the attribute
+ */
+export const hasParentWithDataAttr = (attribute, el, count = 0) => {
+  return el === document.body && count < 2
     ? false
-    : (count > 1)
-      ? true
-      : (el.dataset.viscosity)
-        ? hasParentWithViscosity(el.parentElement, count + 1)
-        : hasParentWithViscosity(el.parentElement, count)
-}
+    : count > 1
+    ? true
+    : el.dataset[attribute]
+    ? hasParentWithDataAttr(attribute, el.parentElement, count + 1)
+    : hasParentWithDataAttr(attribute, el.parentElement, count);
+};
 
-export const isInline = (el) => {
-  return getStyleStr(el, `display`).includes("inline");
-}
 
-export const isImage = (el) => {
-  return el.tagName === "IMG";
-}
+/**
+ * Is the element display: inline-*;
+ * @param {dom-element} el
+ */
+export const isInline = el => getStyleStr(el, `display`).includes("inline");
 
-export const checkForInlineStyle = (el) => {
-  const firstChild = el.firstElementChild
-  return (isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild)));
-}
+
+/**
+ * Is the element an image
+ * @param {dom-element} el 
+ */
+export const isImage = el => el.tagName === "IMG";
+
+
+/**
+ * Is the element of it's first child display: inline-*, or image
+ * @param {dom-element} el 
+ */
+export const checkForInlineStyle = el => {
+  const firstChild = el.firstElementChild;
+  return (
+    isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild))
+  );
+};

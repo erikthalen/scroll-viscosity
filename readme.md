@@ -6,8 +6,9 @@ like it was put into honey.
 ```javascript
 import viscosity from 'scroll-viscosity'
 
-// with an element
 const element = document.querySelector('#viscosity')
+
+// with an element
 viscosity(element)
 
 // with an object
@@ -18,6 +19,16 @@ viscosity({
 
 // with a selector
 viscosity('#viscosity')
+```
+
+## Options
+Available when initializing with an object
+
+```javascript
+| Name   | type      | Default | Description                                        |
+| ------ | --------- | ------- | -------------------------------------------------- |
+| easing | {Number}  | 0.3     | How fast the element comes back in place           |
+| wacky  | {Boolean} | false   | Gives the element a random easing between .05 - .2 |
 ```
 
 ## Hooks

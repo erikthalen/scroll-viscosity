@@ -6,7 +6,7 @@ export default {
   create(viscosity) {
     viscosity.copycat = document.createElement("div");
     viscosity.copycat.classList.add("viscosity-copycat");
-    this.applyStyles(viscosity);
+    // this.applyStyles(viscosity);
     appendAfter(viscosity.copycat)(viscosity.subject);
   },
 
