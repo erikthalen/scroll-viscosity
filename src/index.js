@@ -38,7 +38,7 @@ import onResize from "./resize";
 import Copycat from "./copycat";
 import SubjectStyling from "./subject-styling";
 
-import {hasParentWithViscosity, getStyleRefs, randomInt} from "./utils";
+import { hasParentWithDataAttr, getStyleRefs, randomInt } from "./utils";
 
 class Viscosity {
   constructor({element, easing, wacky}) {
@@ -57,7 +57,7 @@ class Viscosity {
     // todo: better callback, not using time
     // wait for all Viscosity to construct, before checking
     setTimeout(() => {
-      if (hasParentWithViscosity(this.subject)) {
+      if (hasParentWithDataAttr("viscosity", this.subject)) {
         this.subject.dataset.viscosity = "is-child";
         return;
       }
@@ -70,6 +70,7 @@ class Viscosity {
   init() {
     SubjectStyling.setup(this);
     Copycat.create(this);
+    Copycat.applyStyles(this);
     Animation.start(this);
     this.subject.dataset.viscosity = "is-running";
   }
@@ -84,7 +85,6 @@ class Viscosity {
   _onResize() {
     setTimeout(() => {
       this.originalPlacement = getStyleRefs(this.subject);
-      Copycat.applyStyles(this);
     });
 
     if (this.isRunning) {
