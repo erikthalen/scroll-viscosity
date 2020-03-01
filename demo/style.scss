@@ -48,6 +48,7 @@ label {
 }
 
 section {
+	position: relative;
 	height: 80vh;
 	margin-bottom: 15vh;
 	display: flex;
@@ -64,7 +65,7 @@ section {
 			content: "example";
 			font-size: 20vw;
 			color: #ffd404;
-			opacity: .1;
+			opacity: 0.1;
 			z-index: -1;
 			position: absolute;
 		}
@@ -105,7 +106,6 @@ section {
 		font-size: 150px;
 		margin: -.2em 0 0;
 		text-decoration: none;
-
 		@media screen and (max-width: 840px) {
 			font-size: 17vw;
 		}
@@ -128,8 +128,6 @@ section {
 	}
 
 	&.swarm {
-		position: relative;
-
 		img {
 			position: absolute;
 			width: 30px;
@@ -172,6 +170,23 @@ section {
 	}
 }
 
+.big {
+	font-size: 10vw;
+	position: absolute;
+	@for $i from 1 through 20 {
+		&:nth-child(#{$i}) {
+			transform: translateX(#{$i + 1%});
+		}
+	}
+}
+
+[data-amount]:before {
+	// content: attr(data-amount);
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: gray;
+}
 // .badge {
 // 	color: #ff1d04;
 // 	text-transform: uppercase;

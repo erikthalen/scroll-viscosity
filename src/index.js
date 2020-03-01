@@ -74,7 +74,6 @@ class Viscosity {
     this.subject.dataset.viscosity = "is-running";
   }
 
-  // revert everything back to normal
   destroy() {
     SubjectStyling.revert(this)
     Copycat.remove(this);
@@ -82,7 +81,6 @@ class Viscosity {
     this.subject.dataset.viscosity = "is-destroyed";
   }
 
-  // what to do on screen resize
   _onResize() {
     setTimeout(() => {
       this.originalPlacement = getStyleRefs(this.subject);

@@ -34,31 +34,31 @@ export default {
       left: position === "absolute"
         ? leftPos - bodyMargin
         : leftPos + "px",
-      top: this.accounted(viscosity, topPos) + "px",
-      margin: this.getMargins(viscosity),
+      top: this._accounted(viscosity, topPos) + "px",
+      margin: this._getMargins(viscosity),
       padding: padding !== "0px" && padding
     });
   },
 
-  getMargins(viscosity) {
-    return `${this.getMargin(viscosity, "Top")} ${this.getMargin(viscosity, "Right")} ${this.getMargin(viscosity, "Bottom")} ${this.getMargin(viscosity, "Left")}`;
+  _getMargins(viscosity) {
+    return `${this._getMargin(viscosity, "Top")} ${this._getMargin(viscosity, "Right")} ${this._getMargin(viscosity, "Bottom")} ${this._getMargin(viscosity, "Left")}`;
   },
 
-  getMargin(viscosity, direction) {
+  _getMargin(viscosity, direction) {
     if (checkForInlineStyle(viscosity.subject)) {
       return parseFloat(viscosity.originalPlacement[`margin${direction}`]);
     }
 
-    return (Math.max(parseFloat(viscosity.originalPlacement[`margin${direction}`]), parseFloat(this.getChildMargin(viscosity, direction))) + "px");
+    return (Math.max(parseFloat(viscosity.originalPlacement[`margin${direction}`]), parseFloat(this._getChildMargin(viscosity, direction))) + "px");
   },
 
-  getChildMargin(viscosity, direction) {
+  _getChildMargin(viscosity, direction) {
     return viscosity.firstElementChild
       ? parseFloat(getStyleStr(viscosity.firstElementChild, `margin${direction}`))
       : 0;
   },
 
-  accounted(viscosity, topPos) {
+  _accounted(viscosity, topPos) {
     return checkForInlineStyle(viscosity.subject)
       ? topPos + viscosity.originalPlacement.bodyMargin
       : viscosity.originalPlacement.position === "absolute"

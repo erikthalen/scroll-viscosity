@@ -1,7 +1,5 @@
 import {removeInlineStyles, sumAsFloat, getStyleStr, isInline, checkForInlineStyle} from './utils'
 
-// the costume restyles the subject
-// puts a costume on it..
 export default {
   setup(viscosity) {
     const {
@@ -21,7 +19,7 @@ export default {
       position: "fixed",
       top: sumAsFloat(topPos, paddingTop) + 'px',
       left: leftPos - parseFloat(marginLeft) + 'px',
-      right: rightPos + 'px',
+      // right: rightPos + 'px',
       margin: margin !== '0px' && margin
     })
 
@@ -34,7 +32,7 @@ export default {
       'position',
       'top',
       'left',
-      'right',
+      // 'right',
       'width',
       'height',
       'margin'
@@ -42,7 +40,7 @@ export default {
 
     viscosity.subject.style.cssText = viscosity.originalPlacement.inline
 
-    if (viscosity.subject.firstElementChild)
+    if (viscosity.subject.firstElementChild && checkForInlineStyle(viscosity.subject))
       viscosity.subject.firstElementChild.style.removeProperty('margin-top')
   }
 }

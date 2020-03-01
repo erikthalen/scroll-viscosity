@@ -1,6 +1,3 @@
-/**
- * debounced callback
- */
 export default function Resize(callback) {
   let resizeTimer = null
 
