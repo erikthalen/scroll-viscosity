@@ -2,8 +2,7 @@
  * Number fns
  */
 
-
- /**
+/**
   * Convert X to float
   */
 const asFloat = x => parseFloat(x);
@@ -13,7 +12,6 @@ const asFloat = x => parseFloat(x);
  */
 export const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
 
-
 /**
  * returns a random number within range
  * @param {number} from min value
@@ -21,34 +19,30 @@ export const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
  */
 export const randomInt = (from, to) => Math.random() * (to - from) + from;
 
-
 /**
  * Converts strings to numbers, and sums them
  * @param  {...string/number} xs what to sum up
  */
 export const sumAsFloat = (...xs) => {
   return xs.reduce((x, cur) => {
-    if (cur === "auto") {
+    if (cur === 'auto') {
       cur = 0;
     }
     return (x = x + parseFloat(cur));
   }, 0);
 };
 
-
-
 /**
- * Get/Set dom fns 
+ * Get/Set dom fns
  */
 
 /**
- * 
+ *
  * @param {dom-element} el element to check
  * @param {string} prop property to check
  * @returns {string}
  */
 export const getStyleStr = (el, prop) => window.getComputedStyle(el)[prop];
-
 
 /**
  * @param {dom-element} el element to remove style from
@@ -57,8 +51,8 @@ export const getStyleStr = (el, prop) => window.getComputedStyle(el)[prop];
 export const removeInlineStyles = (el, ...props) => {
   props.forEach(prop => el.style.removeProperty(prop));
 
-  if (!el.getAttribute("style")) {
-    el.removeAttribute("style");
+  if (!el.getAttribute('style')) {
+    el.removeAttribute('style');
   }
 };
 
@@ -76,43 +70,34 @@ export const appendAfter = source => {
  * Style properties related to this program
  */
 export const placementStyleProps = [
-  "position",
-  "top",
-  "left",
-  "right",
-  "width",
-  "height",
-  "display",
-  "transform",
-  "marginTop",
-  "marginBottom",
-  "marginLeft",
-  "marginRight",
-  "paddingTop",
-  "margin",
-  "padding"
+  'position',
+  'top',
+  'left',
+  'width',
+  'height',
+  'display',
+  'transform',
+  'marginTop',
+  'marginBottom',
+  'marginLeft',
+  'marginRight',
+  'paddingTop',
+  'margin',
+  'padding'
 ];
 
 // fuck this mess
 export const getStyleRefs = el => {
   const obj = {};
   placementStyleProps.forEach(style => (obj[style] = getStyleStr(el, style)));
-  obj.transform = getStyleStr(el, "transform")
-    .split(/[(,)]+/)
-    .filter(Boolean)
-    .map(asFloat);
+  obj.transform = getStyleStr(el, 'transform').split(/[(,)]+/).filter(Boolean).map(asFloat);
   obj.inline = el.style.cssText;
-  obj.topPos =
-    el.getBoundingClientRect().top +
-    window.pageYOffset -
-    parseFloat(getStyleStr(el, "marginTop")) -
-    parseFloat(getStyleStr(el, "paddingTop"));
+  obj.topPos = el.getBoundingClientRect().top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) - parseFloat(getStyleStr(el, 'paddingTop'));
   obj.leftPos = el.getBoundingClientRect().left;
   obj.rightPos = el.getBoundingClientRect().right;
-  obj.bodyMargin = parseFloat(getStyleStr(document.body, "marginLeft"));
+  obj.bodyMargin = parseFloat(getStyleStr(document.body, 'marginLeft'));
   return obj;
 };
-
 
 /**
  * Traverses the dom upwards and checks for a certain data-attribute
@@ -125,34 +110,43 @@ export const hasParentWithDataAttr = (attribute, el, count = 0) => {
   return el === document.body && count < 2
     ? false
     : count > 1
-    ? true
-    : el.dataset[attribute]
-    ? hasParentWithDataAttr(attribute, el.parentElement, count + 1)
-    : hasParentWithDataAttr(attribute, el.parentElement, count);
+      ? true
+      : el.dataset[attribute]
+        ? hasParentWithDataAttr(attribute, el.parentElement, count + 1)
+        : hasParentWithDataAttr(attribute, el.parentElement, count);
 };
-
 
 /**
  * Is the element display: inline-*;
  * @param {dom-element} el
  */
-export const isInline = el => getStyleStr(el, `display`).includes("inline");
-
+export const isInline = el => getStyleStr(el, `display`).includes('inline');
 
 /**
  * Is the element an image
- * @param {dom-element} el 
+ * @param {dom-element} el
  */
-export const isImage = el => el.tagName === "IMG";
-
+export const isImage = el => el.tagName === 'IMG';
 
 /**
  * Is the element of it's first child display: inline-*, or image
- * @param {dom-element} el 
+ * @param {dom-element} el
  */
 export const checkForInlineStyle = el => {
   const firstChild = el.firstElementChild;
-  return (
-    isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild))
-  );
+  return (isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild)));
 };
+
+export const assertThat = (predicate) => {
+  return new Promise(resolve => {
+    if (predicate) {
+      resolve()
+    } else {
+      return requestAnimationFrame(() => assertThat(predicate))
+    }
+  })
+}
+
+export const copycatIsGone = (viscosity) => {
+  return (!viscosity.subject.nextElementSibling || (viscosity.subject.nextElementSibling && !viscosity.subject.nextElementSibling.classList.contains('viscosity-copycat')))
+}

@@ -37,7 +37,7 @@ label {
 	&:after {
 		opacity: 0;
 		content: "";
-		height: 0.3em;
+		height: 0.2em;
 		width: 120%;
 		background-color: currentColor;
 		position: absolute;
@@ -45,6 +45,10 @@ label {
 		top: 45%;
 		transform: translateY(-50%) rotate(-10deg);
 	}
+}
+
+img {
+	max-width: 100%;
 }
 
 section {
@@ -62,7 +66,7 @@ section {
 
 	&.backdrop {
 		&:after {
-			content: "example";
+			content: attr(data-content);
 			font-size: 20vw;
 			color: #ffd404;
 			opacity: 0.1;
@@ -72,7 +76,6 @@ section {
 	}
 
 	.half {
-		// position: absolute;
 		padding: 3em;
 		max-width: 25em;
 
@@ -149,16 +152,6 @@ section {
 	opacity: 0.15;
 }
 
-.borders {
-	.viscosity {
-		outline: 1px solid rgba(0, 0, 255, 0.2);
-	}
-
-	.viscosity-copycat {
-		outline: 1px solid rgba(255, 0, 0, 0.2);
-	}
-}
-
 #ruler {
 	pointer-events: none;
 	opacity: 0;
@@ -173,28 +166,17 @@ section {
 .big {
 	font-size: 10vw;
 	position: absolute;
-	@for $i from 1 through 20 {
-		&:nth-child(#{$i}) {
-			transform: translateX(#{$i + 1%});
-		}
-	}
 }
 
-[data-amount]:before {
-	// content: attr(data-amount);
+.badge {
+	width: auto;
+	color: #ff1d04;
+	text-transform: uppercase;
 	position: absolute;
-	top: 0;
-	left: 0;
-	color: gray;
+	font-size: 50px;
+	transform: rotate(-15deg);
+	z-index: 2;
+	border: 0.2em solid;
+	padding: 0.2em;
+	opacity: 0.8;
 }
-// .badge {
-// 	color: #ff1d04;
-// 	text-transform: uppercase;
-// 	position: absolute;
-// 	font-size: 50px;
-// 	transform: rotate(-15deg);
-// 	z-index: 2;
-// 	border: 0.2em solid;
-// 	padding: 0.2em;
-// 	opacity: 0.8;
-// }

@@ -5,7 +5,8 @@
 	"author": "Erik Thalén",
 	"main": "src/index.js",
 	"scripts": {
-		"start": "webpack-dev-server"
+		"start": "webpack-dev-server",
+		"build": "webpack"
 	},
 	"devDependencies": {
 		"css-loader": "^3.4.2",

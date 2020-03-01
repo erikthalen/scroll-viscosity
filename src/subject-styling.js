@@ -7,40 +7,40 @@ export default {
       paddingTop,
       marginLeft,
       leftPos,
-      rightPos,
       width,
       height,
       margin
     } = viscosity.originalPlacement
 
     Object.assign(viscosity.subject.style, {
+      position: 'fixed',
       width,
       height,
-      position: "fixed",
       top: sumAsFloat(topPos, paddingTop) + 'px',
       left: leftPos - parseFloat(marginLeft) + 'px',
-      // right: rightPos + 'px',
       margin: margin !== '0px' && margin
     })
 
-    if (viscosity.subject.firstElementChild && checkForInlineStyle(viscosity.subject))
-      setTimeout(() => viscosity.subject.firstElementChild.style.marginTop = 0)
+    if (viscosity.subject.firstElementChild) {
+      setTimeout(() => viscosity.subject.firstElementChild.style.margin = 0)
+    }
   },
 
   revert(viscosity) {
     removeInlineStyles(viscosity.subject, [
       'position',
-      'top',
-      'left',
-      // 'right',
       'width',
       'height',
+      'top',
+      'left',
       'margin'
     ])
 
-    viscosity.subject.style.cssText = viscosity.originalPlacement.inline
+    setTimeout(() => {
+      viscosity.subject.style.cssText = viscosity.originalPlacement.inline
+    })
 
-    if (viscosity.subject.firstElementChild && checkForInlineStyle(viscosity.subject))
-      viscosity.subject.firstElementChild.style.removeProperty('margin-top')
+    if (viscosity.subject.firstElementChild)
+      viscosity.subject.firstElementChild.style.removeProperty('margin')
   }
 }

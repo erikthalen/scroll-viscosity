@@ -1,18 +1,15 @@
-import "./style.scss";
+import './style.scss'
 
-import viscosity from "./../src/index.js";
+import viscosity from './../src/index.js'
 
-import ui from "./ui";
-import swarm from "./swarm";
+import ui from './ui'
+import swarm from './swarm'
 
-// init
-swarm(document.querySelector(".swarm"), 50);
+swarm(document.querySelector('.swarm'), 50)
 
 setTimeout(() => {
-  const els = [...document.body.querySelectorAll(".viscosity")];
-  const Vs = els.map(el =>
-    viscosity({ element: el, easing: el.dataset.amount })
-  );
+  const els = [...document.body.querySelectorAll('.viscosity')]
+  const Vs = els.map(element => viscosity({element, easing: element.dataset.amount}))
 
-  ui(Vs); // activate ui elements
-});
+  ui(Vs)
+}, 100)
