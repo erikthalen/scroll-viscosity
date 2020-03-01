@@ -68,7 +68,6 @@ export default {
       return this._getChildMargin(viscosity.subject[firstOrLast], direction)
   } else if (firstOrLast && viscosity.subject[firstOrLast]) {
       // else return child margin
-	  // console.log(parseFloat(getStyleStr(viscosity.subject[firstOrLast], `margin${direction}`)))
       return parseFloat(getStyleStr(viscosity.subject[firstOrLast], `margin${direction}`))
     }
 

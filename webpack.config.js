@@ -31,7 +31,7 @@ module.exports = {
     ]
   },
   plugins: [new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'demo/demo.html'),
+      template: path.resolve(__dirname, 'demo/index.html'),
       title: 'Viscosity',
       favicon: path.resolve(__dirname, 'demo/honey.png')
     })]

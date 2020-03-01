@@ -2,7 +2,7 @@ import {lerp, removeInlineStyles} from './utils'
 
 export default {
   isInView: true, // this one gotta go into viscosity
-  oldBodyHeight: 0,
+  oldBodyHeight: document.body.clientHeight,
 
   update(viscosity, position = (window.pageYOffset * -1)) {
     if (!viscosity.isRunning)
@@ -11,7 +11,7 @@ export default {
     requestAnimationFrame(() => this.update(viscosity, position))
 
     // if a new image loads, reposition all elements
-    // this._checkBodyHeight(viscosity)
+    this._checkBodyHeight(viscosity)
 
     position = this.isInView
       ? lerp(position, window.pageYOffset * -1, viscosity.easing)
