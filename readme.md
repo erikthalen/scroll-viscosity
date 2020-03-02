@@ -1,6 +1,8 @@
 ![Screenshot of the plugin](https://i.ibb.co/CBnbxXQ/screenshot.jpg "Screenshot")
 
-# [wip] Viscosity
+# Viscosity
+
+### 🐝 [Demo](http://www.erikthalen.com/bodega/viscosity)  🐝
 
 Makes an element react slower to scrolling,  
 like it was put into honey.
