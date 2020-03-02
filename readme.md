@@ -1,6 +1,6 @@
-# [wip] Viscosity
-
 ![Screenshot of the plugin](https://i.ibb.co/CBnbxXQ/screenshot.jpg "Screenshot")
+
+# [wip] Viscosity
 
 Makes an element react slower to scrolling,  
 like it was put into honey.
