@@ -10,7 +10,7 @@ export default {
     requestAnimationFrame(() => this._update(viscosity, position))
 
     // if a new image loads, reposition all elements
-    this._checkBodyHeight(viscosity)
+    // this._checkBodyHeight(viscosity)
 
     position = lerp(position, window.pageYOffset * -1, viscosity.easing)
 
@@ -41,8 +41,9 @@ export default {
 
   _checkBodyHeight(viscosity) {
     if (this.oldBodyHeight !== document.body.clientHeight) {
-      viscosity._restart()
+      viscosity.restart()
     }
+    console.log('OLD: ', this.oldBodyHeight, 'NEW:', document.body.clientHeight);
     this.oldBodyHeight = document.body.clientHeight
   },
 

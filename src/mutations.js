@@ -13,7 +13,7 @@ export default {
     }
 
     if (this.isRunning && this.size.width !== getStyleStr(mutationsList[0].target, 'width') || this.size.height !== getStyleStr(mutationsList[0].target, 'height')) {
-      setTimeout(() => this._restart())
+      setTimeout(() => this.restart())
 
       this.size = {
         width: getStyleStr(mutationsList[0].target, 'width'),

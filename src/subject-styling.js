@@ -1,4 +1,4 @@
-import {removeInlineStyles, sumAsFloat, getStyleStr, isInline, checkForInlineStyle} from './utils'
+import {sumAsFloat} from './utils'
 
 export default {
   setup(viscosity) {

@@ -52,12 +52,12 @@ label {
 }
 
 img {
-	max-width: 100%;
+	// max-width: 100%;
 }
 
 section {
 	position: relative;
-	height: 80vh;
+	min-height: 80vh;
 	margin-bottom: 15vh;
 	display: flex;
 	flex-direction: column;
@@ -170,6 +170,10 @@ section {
 .big {
 	font-size: 10vw;
 	position: absolute;
+}
+
+.full {
+	height: 300vh;
 }
 
 .badge {

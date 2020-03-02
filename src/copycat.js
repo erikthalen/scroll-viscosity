@@ -1,4 +1,4 @@
-import {appendAfter, getStyleStr, isInline, isImage, checkForInlineStyle} from './utils';
+import {appendAfter, getStyleStr, isImage, checkForInlineStyle} from './utils';
 
 // the copycat takes the subjects place
 export default {

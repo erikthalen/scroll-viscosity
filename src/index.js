@@ -10,7 +10,7 @@ known bugs:
 - slight displacement of content that comes after a row of inline-block subjects. (not prio)
 
 - existing transforms gets applied wrong (transform origin)
-- animation-restarter gives wrong margins
+- when element changes 'display', it isn't updated (out of scope?)
 
 */
 
@@ -19,7 +19,7 @@ import Animation from './animation'
 import onResize from './resize'
 import Copycat from './copycat'
 import SubjectStyling from './subject-styling'
-import Mutations from './mutations'
+// import Mutations from './mutations'
 
 import {
   hasParentWithDataAttr,
@@ -45,18 +45,18 @@ class Viscosity {
 
     // todo: better callback, not using time
     // wait for all Viscosity to construct, before checking
-    assertThat(this.subject.dataset.viscosity === 'is-bound').then(() => {
-      AssetsLoaded(this).then(this.init.bind(this))
-    })
+    assertThat(() => this.subject.dataset.viscosity === "is-bound").then(() => {
+      AssetsLoaded(this).then(this.init.bind(this));
+    });
 
-    onResize(this._restart.bind(this))
+    onResize(this.restart.bind(this))
   }
 
   init() {
-    assertThat(typeof this.originalPlacement === 'undefined').then(() => {
+    assertThat(() => typeof this.originalPlacement === 'undefined').then(() => {
       this.originalPlacement = getStyleRefs(this.subject)
 
-      assertThat(typeof this.originalPlacement === 'object' && copycatIsGone(this)).then(() => {
+      assertThat(() => typeof this.originalPlacement === 'object' && copycatIsGone(this)).then(() => {
         if (hasParentWithDataAttr('viscosity', this.subject)) {
           this.subject.dataset.viscosity = 'is-child'
           return
@@ -78,17 +78,16 @@ class Viscosity {
     Animation.stop(this)
     // Mutations.unobserve(this)
     this.subject.dataset.viscosity = 'is-destroyed'
-    // assertThat(getStyleStr(this.subject, 'position') !== 'fixed').then(() => {
-    setTimeout(() => {
+    
+    assertThat(() => getStyleStr(this.subject, 'position') !== 'fixed').then(() => {
       this.originalPlacement = undefined
-    }, 10)
-    // })
+    })
   }
 
-  _restart() {
+  restart() {
     if (this.isRunning) {
       this.destroy()
-      setTimeout(this.init.bind(this), 100)
+      assertThat(() => typeof this.originalPlacement === 'undefined').then(this.init.bind(this))
     }
   }
 

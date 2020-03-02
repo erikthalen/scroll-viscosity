@@ -3,8 +3,8 @@
  */
 
 /**
-  * Convert X to float
-  */
+ * Convert X to float
+ */
 const asFloat = x => parseFloat(x);
 
 /**
@@ -25,7 +25,7 @@ export const randomInt = (from, to) => Math.random() * (to - from) + from;
  */
 export const sumAsFloat = (...xs) => {
   return xs.reduce((x, cur) => {
-    if (cur === 'auto') {
+    if (cur === "auto") {
       cur = 0;
     }
     return (x = x + parseFloat(cur));
@@ -51,8 +51,8 @@ export const getStyleStr = (el, prop) => window.getComputedStyle(el)[prop];
 export const removeInlineStyles = (el, ...props) => {
   props.forEach(prop => el.style.removeProperty(prop));
 
-  if (!el.getAttribute('style')) {
-    el.removeAttribute('style');
+  if (!el.getAttribute("style")) {
+    el.removeAttribute("style");
   }
 };
 
@@ -70,33 +70,40 @@ export const appendAfter = source => {
  * Style properties related to this program
  */
 export const placementStyleProps = [
-  'position',
-  'top',
-  'left',
-  'width',
-  'height',
-  'display',
-  'transform',
-  'marginTop',
-  'marginBottom',
-  'marginLeft',
-  'marginRight',
-  'paddingTop',
-  'margin',
-  'padding',
-  'borderWidth'
+  "position",
+  "top",
+  "left",
+  "width",
+  "height",
+  "display",
+  "transform",
+  "marginTop",
+  "marginBottom",
+  "marginLeft",
+  "marginRight",
+  "paddingTop",
+  "margin",
+  "padding",
+  "borderWidth"
 ];
 
 // fuck this mess
 export const getStyleRefs = el => {
   const obj = {};
   placementStyleProps.forEach(style => (obj[style] = getStyleStr(el, style)));
-  obj.transform = getStyleStr(el, 'transform').split(/[(,)]+/).filter(Boolean).map(asFloat);
+  obj.transform = getStyleStr(el, "transform")
+    .split(/[(,)]+/)
+    .filter(Boolean)
+    .map(asFloat);
   obj.inline = el.style.cssText;
-  obj.topPos = el.getBoundingClientRect().top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) - parseFloat(getStyleStr(el, 'paddingTop'));
+  obj.topPos =
+    el.getBoundingClientRect().top +
+    window.pageYOffset -
+    parseFloat(getStyleStr(el, "marginTop")) -
+    parseFloat(getStyleStr(el, "paddingTop"));
   obj.leftPos = el.getBoundingClientRect().left;
   obj.rightPos = el.getBoundingClientRect().right;
-  obj.bodyMargin = parseFloat(getStyleStr(document.body, 'marginLeft'));
+  obj.bodyMargin = parseFloat(getStyleStr(document.body, "marginLeft"));
   return obj;
 };
 
@@ -111,23 +118,23 @@ export const hasParentWithDataAttr = (attribute, el, count = 0) => {
   return el === document.body && count < 2
     ? false
     : count > 1
-      ? true
-      : el.dataset[attribute]
-        ? hasParentWithDataAttr(attribute, el.parentElement, count + 1)
-        : hasParentWithDataAttr(attribute, el.parentElement, count);
+    ? true
+    : el.dataset[attribute]
+    ? hasParentWithDataAttr(attribute, el.parentElement, count + 1)
+    : hasParentWithDataAttr(attribute, el.parentElement, count);
 };
 
 /**
  * Is the element display: inline-*;
  * @param {dom-element} el
  */
-export const isInline = el => getStyleStr(el, `display`).includes('inline');
+export const isInline = el => getStyleStr(el, `display`).includes("inline");
 
 /**
  * Is the element an image
  * @param {dom-element} el
  */
-export const isImage = el => el.tagName === 'IMG';
+export const isImage = el => el.tagName === "IMG";
 
 /**
  * Is the element of it's first child display: inline-*, or image
@@ -135,19 +142,34 @@ export const isImage = el => el.tagName === 'IMG';
  */
 export const checkForInlineStyle = el => {
   const firstChild = el.firstElementChild;
-  return (isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild)));
+  return (
+    isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild))
+  );
 };
 
-export const assertThat = (predicate) => {
-  return new Promise(resolve => {
-    if (predicate) {
-      resolve()
+/**
+ * takes a function and resolves when it fn returns true
+ * @param {fn} predicate what to check
+ */
+export const assertThat = predicate => {
+  const checkAgain = (predicate, resolve) => {
+    if (predicate()) {
+      resolve();
     } else {
-      return requestAnimationFrame(() => assertThat(predicate))
+      return requestAnimationFrame(() => checkAgain(predicate, resolve));
     }
-  })
-}
+  };
+  return new Promise(resolve => {
+    checkAgain(predicate, resolve);
+  });
+};
 
-export const copycatIsGone = (viscosity) => {
-  return (!viscosity.subject.nextElementSibling || (viscosity.subject.nextElementSibling && !viscosity.subject.nextElementSibling.classList.contains('viscosity-copycat')))
-}
+export const copycatIsGone = viscosity => {
+  return (
+    !viscosity.subject.nextElementSibling ||
+    (viscosity.subject.nextElementSibling &&
+      !viscosity.subject.nextElementSibling.classList.contains(
+        "viscosity-copycat"
+      ))
+  );
+};

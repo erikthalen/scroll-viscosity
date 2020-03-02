@@ -24,14 +24,15 @@ viscosity('#viscosity')
 ## Options
 Available when initializing with an object
 
-| Name   | type      | Default | Description                                        |
-| ------ | --------- | ------- | -------------------------------------------------- |
-| easing | {Number}  | 0.3     | How fast the element comes back in place           |
-| wacky  | {Boolean} | false   | Gives the element a random easing between .05 - .2 |
+| Name   | type      | Default | Description                                          |
+| ------ | --------- | ------- | ---------------------------------------------------- |
+| easing | {Number}  | 0.3     | How fast the element comes back in place             |
+| wacky  | {Boolean} | false   | Gives the element a random easing between .05 and .2 |
 
 ## Hooks
 ```javascript
 viscosity.destroy() // remove everything related to viscosity
 viscosity.init() // only needed after destroy() has been called
+viscosity.restart() // restarts the application
 viscosity.toggle() // either runs init() or destroy(), respectively
 ```
