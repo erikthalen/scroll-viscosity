@@ -1,4 +1,5 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path');
 
 module.exports = {
@@ -10,13 +11,14 @@ module.exports = {
   entry: './demo/app.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'index.js'
+    publicPath: '/',
+    filename: 'viscosity.js'
   },
   module: {
     rules: [
       {
         test: /\.s[ac]ss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
       }, {
         test: /\.(png|jpg|gif)$/i,
         use: [
@@ -30,9 +32,12 @@ module.exports = {
       }
     ]
   },
-  plugins: [new HtmlWebpackPlugin({
+  plugins: [
+    new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'demo/demo.html'),
       title: 'Viscosity',
       favicon: path.resolve(__dirname, 'demo/honey.png')
-    })]
+    }),
+    new MiniCssExtractPlugin({filename: 'viscosity.css'})
+  ]
 };
