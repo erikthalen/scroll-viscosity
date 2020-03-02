@@ -65,7 +65,9 @@ section {
 	justify-content: center;
 
 	&.horizontal {
-		flex-direction: row;
+		@media screen and (min-width: 768px) {
+			flex-direction: row;
+		}
 	}
 
 	&.backdrop {
@@ -80,7 +82,7 @@ section {
 	}
 
 	.half {
-		padding: 3em;
+		padding: 0 3em;
 		max-width: 25em;
 
 		p {
@@ -108,7 +110,8 @@ section {
 	}
 
 	a,
-	h1 {
+	h1,
+	h3 {
 		font-weight: bold;
 		font-size: 150px;
 		margin: -.2em 0 0;
@@ -120,6 +123,10 @@ section {
 
 	h2 {
 		font-size: 32px;
+	}
+
+	h3 {
+		display: flex;
 	}
 
 	p {

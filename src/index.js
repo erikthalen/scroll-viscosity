@@ -78,7 +78,7 @@ class Viscosity {
     Animation.stop(this)
     // Mutations.unobserve(this)
     this.subject.dataset.viscosity = 'is-destroyed'
-    
+
     assertThat(() => getStyleStr(this.subject, 'position') !== 'fixed').then(() => {
       this.originalPlacement = undefined
     })

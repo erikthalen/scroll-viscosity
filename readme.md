@@ -1,7 +1,17 @@
-# 🍯 [wip] Viscosity
+# [wip] Viscosity
+
+[Screenshot of the plugin](https://i.ibb.co/CBnbxXQ/screenshot.jpg "Screenshot")
 
 Makes an element react slower to scrolling,  
 like it was put into honey.
+
+```bash
+npm install --save scroll-viscosity
+```
+
+```bash
+yarn add scroll-viscosity
+```
 
 ```javascript
 import viscosity from 'scroll-viscosity'
