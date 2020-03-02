@@ -19,6 +19,7 @@ import Animation from './animation'
 import onResize from './resize'
 import Copycat from './copycat'
 import SubjectStyling from './subject-styling'
+import Mutations from './mutations'
 
 import {
   hasParentWithDataAttr,
@@ -44,7 +45,7 @@ class Viscosity {
 
     // todo: better callback, not using time
     // wait for all Viscosity to construct, before checking
-    setTimeout(() => {
+    assertThat(this.subject.dataset.viscosity === 'is-bound').then(() => {
       AssetsLoaded(this).then(this.init.bind(this))
     })
 
@@ -65,6 +66,7 @@ class Viscosity {
         Copycat.create(this)
         Copycat.applyStyles(this)
         Animation.start(this)
+        // Mutations.observe(this)
         this.subject.dataset.viscosity = 'is-running'
       })
     })
@@ -74,6 +76,7 @@ class Viscosity {
     SubjectStyling.revert(this)
     Copycat.remove(this)
     Animation.stop(this)
+    // Mutations.unobserve(this)
     this.subject.dataset.viscosity = 'is-destroyed'
     // assertThat(getStyleStr(this.subject, 'position') !== 'fixed').then(() => {
     setTimeout(() => {
@@ -85,7 +88,7 @@ class Viscosity {
   _restart() {
     if (this.isRunning) {
       this.destroy()
-      setTimeout(this.init.bind(this), 1000)
+      setTimeout(this.init.bind(this), 100)
     }
   }
 

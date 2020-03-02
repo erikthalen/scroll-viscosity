@@ -22,14 +22,15 @@ export default {
       leftPos,
       topPos,
       bodyMargin,
-      padding
+      padding,
+      borderWidth
     } = viscosity.originalPlacement;
 
     Object.assign(viscosity.copycat.style, {
       width,
       height,
       position: position !== 'static' && position,
-      display: !isImage(viscosity.subject) && display !== 'list-item' && display,
+      display: !isImage(viscosity.subject) && display !== 'list-item' && display !== 'block	' && display,
       left: position === 'static'
         ? null
         : position === 'absolute'
@@ -38,8 +39,8 @@ export default {
       top: position === 'static'
         ? null
         : this._accounted(viscosity, topPos) + 'px',
-      margin: this._getMargins(viscosity),
-      padding: padding !== '0px' && padding
+      margin: this._getMargins(viscosity) !== '0px 0px 0px 0px' && this._getMargins(viscosity),
+      padding: (padding !== '0px' && borderWidth !== '0px') && parseFloat(padding) + parseFloat(borderWidth) + 'px'
     });
   },
 
@@ -66,7 +67,7 @@ export default {
     if (firstOrLast && viscosity.subject[firstOrLast] && viscosity.subject[firstOrLast][firstOrLast]) {
       // then run fn with the child
       return this._getChildMargin(viscosity.subject[firstOrLast], direction)
-  } else if (firstOrLast && viscosity.subject[firstOrLast]) {
+    } else if (firstOrLast && viscosity.subject[firstOrLast]) {
       // else return child margin
       return parseFloat(getStyleStr(viscosity.subject[firstOrLast], `margin${direction}`))
     }

@@ -11,5 +11,11 @@ setTimeout(() => {
   const els = [...document.body.querySelectorAll('.viscosity')]
   const Vs = els.map(element => viscosity({element, easing: element.dataset.amount}))
 
+  document.body.addEventListener('click', () => {
+    if (!document.body.querySelector('.full'))
+      return
+    document.body.querySelector('.full').classList.toggle('hidden')
+  })
+
   ui(Vs)
 }, 100)

@@ -7,10 +7,10 @@ const makeOne = (fragment) => {
 
   Object.assign(img.style, {
     top: Math.random() * (window.innerHeight / (window.innerHeight / 100)) + '%',
-    left: Math.random() * (window.innerWidth / (window.innerWidth / 100)) * .95 + 2 + '%',
+    left: Math.random() * (window.innerWidth / (window.innerWidth / 100)) * .9 + 5 + '%',
     width: size,
     height: size,
-    transform: (Math.random() > .5) && 'scaleX(-1)'
+    transform: `translateX(-50%) ${(Math.random() > .5) ? 'scaleX(-1)' : '' }`
   })
 
   img.classList.add('viscosity')

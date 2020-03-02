@@ -1,30 +1,27 @@
 import {lerp, removeInlineStyles} from './utils'
 
 export default {
-  isInView: true, // this one gotta go into viscosity
   oldBodyHeight: document.body.clientHeight,
 
-  update(viscosity, position = (window.pageYOffset * -1)) {
+  _update(viscosity, position = (window.pageYOffset * -1)) {
     if (!viscosity.isRunning)
       return
 
-    requestAnimationFrame(() => this.update(viscosity, position))
+    requestAnimationFrame(() => this._update(viscosity, position))
 
     // if a new image loads, reposition all elements
     this._checkBodyHeight(viscosity)
 
-    position = this.isInView
-      ? lerp(position, window.pageYOffset * -1, viscosity.easing)
-      : window.pageYOffset * -1
+    position = lerp(position, window.pageYOffset * -1, viscosity.easing)
 
-    this.setStyle(viscosity, position)
+    this._setStyle(viscosity, position)
   },
 
-  setStyle(viscosity, position) {
+  _setStyle(viscosity, position) {
     const t = viscosity.originalPlacement.transform
     if (t.length > 1) {
       // merge existing transform styling
-      viscosity.subject.style.transform = `matrix(${t[1]}, ${t[2]}, ${t[3]}, ${t[4]}, ${t[5]}, ${t[6] + position})`
+      viscosity.subject.style.transform = `matrix(${t[1]}, ${t[2]}, ${t[3]}, ${t[4]}, 0, ${t[6] + position})`
     } else {
       // subject had no existing transform
       viscosity.subject.style.transform = `translate3d(0, ${position}px, 0)`
@@ -51,7 +48,7 @@ export default {
 
   start(viscosity) {
     viscosity.isRunning = true
-    this.update(viscosity)
+    this._update(viscosity)
   },
 
   stop(viscosity) {

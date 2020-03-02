@@ -27,18 +27,7 @@ export default {
   },
 
   revert(viscosity) {
-    removeInlineStyles(viscosity.subject, [
-      'position',
-      'width',
-      'height',
-      'top',
-      'left',
-      'margin'
-    ])
-
-    setTimeout(() => {
-      viscosity.subject.style.cssText = viscosity.originalPlacement.inline
-    })
+    setTimeout(() => viscosity.subject.style.cssText = viscosity.originalPlacement.inline)
 
     if (viscosity.subject.firstElementChild)
       viscosity.subject.firstElementChild.style.removeProperty('margin')

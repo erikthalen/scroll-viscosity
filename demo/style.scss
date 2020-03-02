@@ -7,6 +7,10 @@ body {
 	min-height: 200vh;
 }
 
+.hidden {
+	display: none;
+}
+
 a {
 	color: currentColor;
 }
@@ -125,7 +129,7 @@ section {
 		text-align: center;
 	}
 
-	img {
+	img:not(.full) {
 		max-width: 200px;
 		z-index: 2;
 	}

@@ -83,7 +83,8 @@ export const placementStyleProps = [
   'marginRight',
   'paddingTop',
   'margin',
-  'padding'
+  'padding',
+  'borderWidth'
 ];
 
 // fuck this mess
