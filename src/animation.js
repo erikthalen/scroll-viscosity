@@ -2,7 +2,7 @@ import {lerp, removeInlineStyles} from './utils'
 
 export default {
   // oldBodyHeight: document.body.clientHeight,
-  lastPos: window.pageYOffset * -1,
+  // lastPos: window.pageYOffset * -1,
 
   _update(viscosity, position = (window.pageYOffset * -1)) {
     if (!viscosity.isRunning)
@@ -22,8 +22,8 @@ export default {
     const rounded = Math.round((position + Number.EPSILON) * 10) / 10
     const t = viscosity.originalPlacement.transform
 
-    if (rounded === this.lastPos) {
-      return
+    if (rounded === viscosity.lastPos) {
+      return;
     }
 
     if (t.length > 1) {
@@ -34,12 +34,12 @@ export default {
       viscosity.subject.style.transform = `translate3d(0, ${rounded}px, 0)`
     }
 
-    this.lastPos = rounded
+    viscosity.lastPos = rounded;
   },
 
   start(viscosity) {
     viscosity.isRunning = true
-    this.lastPos = 0
+    viscosity.lastPos = window.pageYOffset * -1;
     this._update(viscosity)
   },
 
