@@ -48,3 +48,12 @@ instance.init() // only needed after destroy() has been called
 instance.restart() // restarts the application
 instance.toggle() // either runs init() or destroy(), respectively
 ```
+
+
+### Todo:
+- Handle inline elements (calc correct w/h)
+
+### Known bugs:
+- slight displacement of content that comes after a row of inline-block subjects. (not prio)
+- existing advanced transforms gets placed wrong (skew/rotate)
+- when element changes 'display', it isn't updated (out of scope?)
