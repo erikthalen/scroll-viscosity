@@ -46,7 +46,6 @@ class Viscosity {
   }
 
   init() {
-    // assertThat(() => typeof this.originalPlacement === 'undefined').then(async () => {
     setTimeout(() => {
       getStyleRefs(this.subject).then(refs => {
         this.originalPlacement = refs
@@ -55,7 +54,6 @@ class Viscosity {
           console.log(`Didn't get any style refs, just got: `, this.originalPlacement)
         }
 
-        // assertThat(() => (typeof this.originalPlacement === 'object') && copycatIsGone(this)).then(() => {
         setTimeout(() => {
           if (hasParentWithDataAttr('viscosity', this.subject)) {
             this.subject.dataset.viscosity = 'is-child'

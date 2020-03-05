@@ -53,8 +53,10 @@ instance.toggle() // either runs init() or destroy(), respectively
 ### Todo:
 - ~~Handle inline elements (calc correct w/h)~~
 - Create bookmarklet for easier testing/it's cool
+- Fix assertThat function, to not rely on time when accessing dom
+- Make into custom element(?)
 
-### Known bugs:
+#### Known bugs:
 - slight displacement of content that comes after a row of inline-block subjects. (not prio)
 - existing advanced transforms gets placed wrong (skew/rotate)
 - when element changes 'display', it isn't updated (out of scope?)
