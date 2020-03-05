@@ -1,9 +1,6 @@
 import {lerp, removeInlineStyles} from './utils'
 
 export default {
-  // oldBodyHeight: document.body.clientHeight,
-  // lastPos: window.pageYOffset * -1,
-
   _update(viscosity, position = (window.pageYOffset * -1)) {
     if (!viscosity.isRunning)
       return
@@ -19,27 +16,19 @@ export default {
   },
 
   _setStyle(viscosity, position) {
-    const rounded = Math.round((position + Number.EPSILON) * 10) / 10
-    const t = viscosity.originalPlacement.transform
-
-    if (rounded === viscosity.lastPos) {
-      return;
-    }
+    const t = viscosity.originalPlacement.transform || []
 
     if (t.length > 1) {
       // merge existing transform styling
-      viscosity.subject.style.transform = `matrix(${t[1]}, ${t[2]}, ${t[3]}, ${t[4]}, 0, ${t[6] + rounded})`
+      viscosity.subject.style.transform = `matrix(${t[1]}, ${t[2]}, ${t[3]}, ${t[4]}, 0, ${t[6] + position})`
     } else {
       // subject had no existing transform
-      viscosity.subject.style.transform = `translate3d(0, ${rounded}px, 0)`
+      viscosity.subject.style.transform = `translate3d(0, ${position}px, 0)`
     }
-
-    viscosity.lastPos = rounded;
   },
 
   start(viscosity) {
     viscosity.isRunning = true
-    viscosity.lastPos = window.pageYOffset * -1;
     this._update(viscosity)
   },
 

@@ -8,7 +8,7 @@ module.exports = {
     compress: true,
     port: 9002
   },
-  entry: './demo/app.js',
+  entry: './demo/index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/',
@@ -29,7 +29,18 @@ module.exports = {
             }
           }
         ]
-      }
+      },
+     {
+         test: /\.m?js$/,
+         exclude: /(node_modules|bower_components)/,
+         use: {
+           loader: 'babel-loader',
+           options: {
+             presets: ['@babel/preset-env'],
+             plugins: ["transform-async-to-generator"]
+           }
+         }
+       }
     ]
   },
   plugins: [

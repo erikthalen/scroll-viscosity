@@ -39,7 +39,7 @@ Available when initializing with an object
 | Name   | type      | Default | Description                                          |
 | ------ | --------- | ------- | ---------------------------------------------------- |
 | easing | {Number}  | 0.3     | How fast the element comes back in place             |
-| wacky  | {Boolean} | false   | Gives the element a random easing between .05 and .2 |
+| wacky  | {Boolean} | false   | Gives the element a random easing between .1 and .25 |
 
 ## Hooks
 ```javascript
@@ -51,7 +51,8 @@ instance.toggle() // either runs init() or destroy(), respectively
 
 
 ### Todo:
-- Handle inline elements (calc correct w/h)
+- ~~Handle inline elements (calc correct w/h)~~
+- Create bookmarklet for easier testing/it's cool
 
 ### Known bugs:
 - slight displacement of content that comes after a row of inline-block subjects. (not prio)

@@ -6,6 +6,7 @@ export default {
   // setup the element that will take up space in the dom tree
   create(viscosity) {
     viscosity.copycat = document.createElement('div');
+    viscosity.copycat.innerHTML = String.fromCharCode(160) // a space
     viscosity.copycat.classList.add(COPYCAT_CLASS);
     appendAfter(viscosity.copycat)(viscosity.subject);
   },
@@ -17,24 +18,30 @@ export default {
   applyStyles(viscosity) {
     const {
       position,
-      width,
-      height,
       display,
       leftPos,
       topPos,
       bodyMargin,
       padding,
-      borderWidth
+      borderWidth,
+      widthPos,
+      heightPos,
+      float
     } = viscosity.originalPlacement;
 
     Object.assign(viscosity.copycat.style, {
-      width, height,
+      width: widthPos + 'px',
+      height: heightPos + 'px',
       position: this._ifNot('static')(position),
-      display: !isImage(viscosity.subject) && this._ifNot('list-item', 'block')(display),
-      left: this._ifNot('static')(position) && ((position === 'absolute') ? (leftPos - bodyMargin + 'px') : (leftPos + 'px')),
-      top: this._ifNot('static')(position) && this._accounted(viscosity, topPos) + 'px',
-      margin: this._ifNot('0px 0px 0px 0px')(this._getMargins(viscosity)),
-      padding: (padding !== '0px' && borderWidth !== '0px') && parseFloat(padding) + parseFloat(borderWidth) + 'px'
+      display: !isImage(viscosity.subject) && this._ifNot('list-item', 'block')(display) && (display === 'inline' && 'inline-block'),
+      left: this._ifNot('static', 'relative')(position) && (
+        (position === 'absolute')
+        ? (leftPos - bodyMargin + 'px')
+        : (leftPos + 'px')),
+      top: this._ifNot('static', 'relative')(position) && this._accounted(viscosity, topPos) + 'px',
+      margin: this._getMargins(viscosity),
+      padding: (padding !== '0px' && borderWidth !== '0px') && parseFloat(padding) + parseFloat(borderWidth) + 'px',
+      float: this._ifNot('none')(float)
     });
   },
 
@@ -47,26 +54,33 @@ export default {
       return parseFloat(viscosity.originalPlacement[`margin${direction}`]);
     }
 
-    return (Math.max(parseFloat(viscosity.originalPlacement[`margin${direction}`]), parseFloat(this._getChildMargin(viscosity, direction))) + 'px');
+    return (Math.max(parseFloat(viscosity.originalPlacement[`margin${direction}`]), parseFloat(this._getChildMargin(viscosity.subject, direction))) + 'px');
   },
 
-  _getChildMargin(viscosity, direction) {
+  _getChildMargin(subject, direction) {
     const firstOrLastChild = (direction === 'Top')
       ? 'firstElementChild'
       : (direction === 'Bottom')
         ? 'lastElementChild'
         : null
 
-    // does first child have children?
-    if (firstOrLastChild && viscosity.subject[firstOrLastChild] && viscosity.subject[firstOrLastChild][firstOrLastChild]) {
-      // then run fn with the child
-      return this._getChildMargin(viscosity.subject[firstOrLastChild], direction)
-    } else if (firstOrLastChild && viscosity.subject[firstOrLastChild]) {
-      // else return child margin
-      return parseFloat(getStyleStr(viscosity.subject[firstOrLastChild], `margin${direction}`))
+    if (!subject) {
+      // console.log('Found no subject, found: ', subject)
+      return
     }
 
-    return parseFloat(getStyleStr(viscosity.subject, `margin${direction}`));
+    if (!firstOrLastChild) {
+      return parseFloat(getStyleStr(subject, `margin${direction}`));
+    }
+
+    // does first child have children?
+    if (firstOrLastChild && subject[firstOrLastChild] && subject[firstOrLastChild][firstOrLastChild]) {
+      // then run fn with the child
+      return this._getChildMargin(subject[firstOrLastChild], direction)
+    } else if (firstOrLastChild && subject[firstOrLastChild]) {
+      // else return child margin
+      return parseFloat(getStyleStr(subject[firstOrLastChild], `margin${direction}`))
+    }
 
   },
 

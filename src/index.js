@@ -4,15 +4,7 @@
  * Erik Thalén - erikthalen.com
  */
 
-/**
-known bugs:
-
-- slight displacement of content that comes after a row of inline-block subjects. (not prio)
-
-- existing transforms gets applied wrong (transform origin)
-- when element changes 'display', it isn't updated (out of scope?)
-
-*/
+// import "regenerator-runtime/runtime";
 
 import AssetsLoaded from './assets-loaded'
 import Animation from './animation'
@@ -34,10 +26,11 @@ class Viscosity {
   constructor({element, easing, wacky}) {
     this.subject = element
     this.easing = wacky
-      ? randomInt(.05, .2)
+      ? randomInt(.1, .25)
       : easing || .3
 
     if (!this.subject) {
+      console.log('No subject! Cancelling')
       return
     }
 
@@ -53,22 +46,30 @@ class Viscosity {
   }
 
   init() {
-    assertThat(() => typeof this.originalPlacement === 'undefined').then(() => {
-      this.originalPlacement = getStyleRefs(this.subject)
+    // assertThat(() => typeof this.originalPlacement === 'undefined').then(async () => {
+    setTimeout(() => {
+      getStyleRefs(this.subject).then(refs => {
+        this.originalPlacement = refs
 
-      assertThat(() => typeof this.originalPlacement === 'object' && copycatIsGone(this)).then(() => {
-        if (hasParentWithDataAttr('viscosity', this.subject)) {
-          this.subject.dataset.viscosity = 'is-child'
-          return
+        if (!this.originalPlacement) {
+          console.log(`Didn't get any style refs, just got: `, this.originalPlacement)
         }
 
-        SubjectStyling.setup(this)
-        Copycat.create(this)
-        Copycat.applyStyles(this)
-        Animation.start(this)
-        // Mutations.observe(this)
-        this.subject.dataset.viscosity = 'is-running'
-      })
+        // assertThat(() => (typeof this.originalPlacement === 'object') && copycatIsGone(this)).then(() => {
+        setTimeout(() => {
+          if (hasParentWithDataAttr('viscosity', this.subject)) {
+            this.subject.dataset.viscosity = 'is-child'
+            return
+          }
+
+          SubjectStyling.setup(this)
+          Copycat.create(this)
+          Copycat.applyStyles(this)
+          Animation.start(this)
+          // Mutations.observe(this)
+          this.subject.dataset.viscosity = 'is-running'
+        }, 100)
+      }, 100)
     })
   }
 
@@ -79,9 +80,10 @@ class Viscosity {
     // Mutations.unobserve(this)
     this.subject.dataset.viscosity = 'is-destroyed'
 
-    assertThat(() => getStyleStr(this.subject, 'position') !== 'fixed').then(() => {
+    //assertThat(() => getStyleStr(this.subject, 'position') !== 'fixed').then(() => {
+    setTimeout(() => {
       this.originalPlacement = undefined
-    })
+    }, 10)
   }
 
   restart() {

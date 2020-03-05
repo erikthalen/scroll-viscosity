@@ -7,19 +7,19 @@ import {COPYCAT_CLASS} from './constants'
 /**
  * Convert X to float
  */
-const asFloat = x => parseFloat(x);
+const asFloat = x => parseFloat(x)
 
 /**
  * Easing function
  */
-export const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+export const lerp = (start, end, amt) => (1 - amt) * start + amt * end
 
 /**
  * returns a random number within range
  * @param {number} from min value
  * @param {number} to max value
  */
-export const randomInt = (from, to) => Math.random() * (to - from) + from;
+export const randomInt = (from, to) => Math.random() * (to - from) + from
 
 /**
  * Converts strings to numbers, and sums them
@@ -28,11 +28,11 @@ export const randomInt = (from, to) => Math.random() * (to - from) + from;
 export const sumAsFloat = (...xs) => {
   return xs.reduce((x, cur) => {
     if (cur === 'auto') {
-      cur = 0;
+      cur = 0
     }
-    return (x = x + parseFloat(cur));
-  }, 0);
-};
+    return (x = x + parseFloat(cur))
+  }, 0)
+}
 
 /**
  * Get/Set dom fns
@@ -44,19 +44,19 @@ export const sumAsFloat = (...xs) => {
  * @param {string} prop property to check
  * @returns {string}
  */
-export const getStyleStr = (el, prop) => window.getComputedStyle(el)[prop];
+export const getStyleStr = (el, prop) => window.getComputedStyle(el)[prop]
 
 /**
  * @param {dom-element} el element to remove style from
  * @param  {...string} props styles to remove
  */
 export const removeInlineStyles = (el, ...props) => {
-  props.forEach(prop => el.style.removeProperty(prop));
+  props.forEach(prop => el.style.removeProperty(prop))
 
   if (!el.getAttribute('style')) {
-    el.removeAttribute('style');
+    el.removeAttribute('style')
   }
-};
+}
 
 /**
  * curried fn that places source just after target in the dom
@@ -64,9 +64,9 @@ export const removeInlineStyles = (el, ...props) => {
  */
 export const appendAfter = source => {
   return target => {
-    target.parentNode.insertBefore(source, target.nextSibling);
-  };
-};
+    target.parentNode.insertBefore(source, target.nextSibling)
+  }
+}
 
 /**
  * Style properties related to this program
@@ -77,6 +77,8 @@ export const placementStyleProps = [
   'left',
   'width',
   'height',
+  'maxWidth',
+  'maxHeight',
   'display',
   'transform',
   'marginTop',
@@ -86,26 +88,50 @@ export const placementStyleProps = [
   'paddingTop',
   'margin',
   'padding',
-  'borderWidth'
-];
+  'borderWidth',
+  'float'
+]
 
-// fuck this mess
-export const getStyleRefs = el => {
-  const obj = {};
+const collectStyles = (el, obj) => {
+  const rect = el.getBoundingClientRect()
   // directly copy styles
-  placementStyleProps.forEach(style => (obj[style] = getStyleStr(el, style)));
+  placementStyleProps.filter(prop => prop !== 'display').forEach(style => (obj[style] = getStyleStr(el, style)))
   // split transforms matrix style on each matrix
-  obj.transform = getStyleStr(el, 'transform').split(/[(,)]+/).filter(Boolean).map(asFloat);
-  // save a ref of the inline style, straight up
-  obj.inline = el.style.cssText;
+  obj.transform = getStyleStr(el, 'transform').split(/[(,)]+/).filter(Boolean).map(asFloat)
   // calc correct top position
-  obj.topPos = el.getBoundingClientRect().top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) - parseFloat(getStyleStr(el, 'paddingTop'));
-  // left position
-  obj.leftPos = el.getBoundingClientRect().left;
+  obj.topPos = rect.top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) - parseFloat(getStyleStr(el, 'paddingTop'))
+  obj.leftPos = rect.left
+  obj.widthPos = rect.width
+  obj.heightPos = rect.height
   // body margin needed for absolute elements
-  obj.bodyMargin = parseFloat(getStyleStr(document.body, 'marginLeft'));
-  return obj;
-};
+  obj.bodyMargin = parseFloat(getStyleStr(document.body, 'marginLeft'))
+  return obj
+}
+
+export function getStyleRefs(el) {
+  return new Promise((resolve, reject) => {
+    const inline = isInline(el)
+    const obj = {}
+    obj.inlineStyle = el.style.cssText
+    obj.display = getStyleStr(el, 'display')
+
+    if (inline) {
+      el.style.display = 'inline-block'
+      setTimeout(() => {
+        const styles = collectStyles(el, obj)
+        el.style.cssText = obj.inline
+        setTimeout(() => {
+          resolve(styles)
+        })
+      })
+    } else {
+      const styles = collectStyles(el, obj)
+      setTimeout(() => {
+        resolve(styles)
+      })
+    }
+  })
+}
 
 /**
  * Traverses the dom upwards and checks for a certain data-attribute
@@ -121,47 +147,59 @@ export const hasParentWithDataAttr = (attribute, el, count = 0) => {
       ? true
       : el.dataset[attribute]
         ? hasParentWithDataAttr(attribute, el.parentElement, count + 1)
-        : hasParentWithDataAttr(attribute, el.parentElement, count);
-};
+        : hasParentWithDataAttr(attribute, el.parentElement, count)
+}
 
 /**
- * Is the element display: inline-*;
+ * Is the element display: inline-*
  * @param {dom-element} el
  */
-export const isInline = el => getStyleStr(el, `display`).includes('inline');
+export const isInline = el => getStyleStr(el, `display`).includes('inline')
 
 /**
  * Is the element an image
  * @param {dom-element} el
  */
-export const isImage = el => el.tagName === 'IMG';
+export const isImage = el => el.tagName === 'IMG'
 
 /**
  * Is the element of it's first child display: inline-*, or image
  * @param {dom-element} el
  */
 export const checkForInlineStyle = el => {
-  const firstChild = el.firstElementChild;
-  return (isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild)));
-};
+  const firstChild = el.firstElementChild
+  return (isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild)))
+}
 
 /**
  * takes a function and resolves when it fn returns true
  * @param {fn} predicate what to check
  */
 export const assertThat = predicate => {
+  let count = 0
   const checkAgain = (predicate, resolve) => {
+    if (count > 100) {
+      console.warn(`tried ${count} times, but couldn't resolve ${predicate}`)
+      return 'fail'
+    }
     if (predicate()) {
       requestAnimationFrame(resolve)
     } else {
-      return requestAnimationFrame(() => checkAgain(predicate, resolve));
+      return requestAnimationFrame(() => {
+        count++
+        checkAgain(predicate, resolve)
+      })
     }
-  };
+  }
   return new Promise(resolve => {
-    checkAgain(predicate, resolve);
-  });
-};
+    requestAnimationFrame(() => checkAgain(predicate, resolve))
+  })
+}
 
 export const copycatIsGone = viscosity => {
-  return (!viscosity.subject.nextElementSibling || (viscosity.subject.nextElementSibling && !viscosity.subject.nextElementSibling.classList.contains(COPYCAT_CLASS)));
-};
+  // console.log(!viscosity.subject.nextElementSibling, !viscosity.subject.nextElementSibling.classList.contains(COPYCAT_CLASS))
+  if (!viscosity.subject.nextElementSibling) {
+    return true
+  }
+  return !viscosity.subject.nextElementSibling.classList.contains(COPYCAT_CLASS)
+}
