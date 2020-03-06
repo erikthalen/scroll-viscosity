@@ -53,8 +53,9 @@ instance.toggle() // either runs init() or destroy(), respectively
 ### Todo:
 - ~~Handle inline elements (calc correct w/h)~~
 - Create bookmarklet for easier testing/it's cool
-- Fix assertThat function, to not rely on time when accessing dom
+- Fix assertThat function, to not rely on time when checking dom
 - Make into custom element(?)
+- Disable out-of-view-items to save power
 
 #### Known bugs:
 - slight displacement of content that comes after a row of inline-block subjects. (not prio)
