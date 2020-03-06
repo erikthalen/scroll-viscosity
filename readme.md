@@ -52,8 +52,9 @@ instance.toggle() // either runs init() or destroy(), respectively
 
 ### Todo:
 - ~~Handle inline elements (calc correct w/h)~~
+- ~~Don't reposition elements that's out of view~~
 - Create bookmarklet for easier testing/it's cool
-- Fix assertThat function, to not rely on time when accessing dom
+- MutationObserver for elements entering the dom
 - Make into custom element(?)
 
 #### Known bugs:

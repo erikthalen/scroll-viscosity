@@ -85,14 +85,14 @@ class Viscosity {
   }
 
   restart() {
-    if (this.isRunning) {
+    if (Animation.isRunning(this)) {
       this.destroy()
       assertThat(() => typeof this.originalPlacement === 'undefined').then(this.init.bind(this))
     }
   }
 
   toggle() {
-    this.isRunning
+    Animation.isRunning(this)
       ? this.destroy()
       : this.init()
   }

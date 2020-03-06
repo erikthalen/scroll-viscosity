@@ -7,16 +7,21 @@ export default {
 
     requestAnimationFrame(() => this._update(viscosity, position))
 
-    // if a new image loads, reposition all elements
-    // this._checkBodyHeight(viscosity)
-
     position = lerp(position, window.pageYOffset * -1, viscosity.easing)
 
-    this._setStyle(viscosity, position)
+    if (this._isRelevant(viscosity, position)) {
+      // do the transformation
+      this._setStyle(viscosity, position)
+      viscosity.wereInView = true
+    } else if (viscosity.wereInView) {
+      // move it the fuck away, and don't care about it
+      viscosity.wereInView = false
+      viscosity.subject.style.transform = `translateY(${window.innerHeight * 10}px)`
+    }
   },
 
   _setStyle(viscosity, position) {
-    const t = viscosity.originalPlacement.transform || []
+    const t = viscosity.originalPlacement.transform || []
 
     if (t.length > 1) {
       // merge existing transform styling
@@ -35,24 +40,19 @@ export default {
   stop(viscosity) {
     viscosity.isRunning = false
     removeInlineStyles(viscosity.subject, 'transform')
+  },
+
+  isRunning(viscosity) {
+    return viscosity.isRunning
+  },
+
+  _isRelevant(viscosity, position) {
+    // todo: could be that we stop check,
+    // but we don't know for sure element is out of view
+    const offset = viscosity.originalPlacement.heightRect * 2
+    const top = (position + viscosity.originalPlacement.heightRect) >= (viscosity.originalPlacement.topPos * -1) - offset
+    const bottom = position <= (viscosity.originalPlacement.topPos - window.innerHeight) * -1 + offset
+
+    return top && bottom
   }
-
-  // note: does this do much? for performance
-  // startObserve() {
-  //   let callback = (entries, observer) => {
-  //     entries.map(entry => {
-  //       this.isInView = entry.isIntersecting
-  //     })
-  //   }
-  //   let observer = new IntersectionObserver(callback)
-  //   observer.observe(this.subject)
-  // },
-
-  // _checkBodyHeight(viscosity) {
-  //   if (this.oldBodyHeight !== document.body.clientHeight) {
-  //     viscosity.restart()
-  //   }
-  //   console.log('OLD: ', this.oldBodyHeight, 'NEW:', document.body.clientHeight);
-  //   this.oldBodyHeight = document.body.clientHeight
-  // },
 }

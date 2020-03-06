@@ -8,14 +8,14 @@ export default {
       marginLeft,
       leftPos,
       margin,
-      widthPos,
-      heightPos
+      widthRect,
+      heightRect
     } = viscosity.originalPlacement
 
     Object.assign(viscosity.subject.style, {
       position: 'fixed',
-      width: widthPos + 'px',
-      height: heightPos + 'px',
+      width: widthRect + 'px',
+      height: heightRect + 'px',
       top: sumAsFloat(topPos, paddingTop) + 'px',
       left: leftPos - parseFloat(marginLeft) + 'px',
       margin: margin !== '0px' && margin,

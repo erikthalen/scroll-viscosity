@@ -24,14 +24,14 @@ export default {
       bodyMargin,
       padding,
       borderWidth,
-      widthPos,
-      heightPos,
+      widthRect,
+      heightRect,
       float
     } = viscosity.originalPlacement;
 
     Object.assign(viscosity.copycat.style, {
-      width: widthPos + 'px',
-      height: heightPos + 'px',
+      width: widthRect + 'px',
+      height: heightRect + 'px',
       position: this._ifNot('static')(position),
       display: !isImage(viscosity.subject) && this._ifNot('list-item', 'block')(display) && (display === 'inline' && 'inline-block'),
       left: this._ifNot('static', 'relative')(position) && (

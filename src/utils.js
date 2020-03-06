@@ -101,8 +101,8 @@ const collectStyles = (el, obj) => {
   // calc correct top position
   obj.topPos = rect.top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) - parseFloat(getStyleStr(el, 'paddingTop'))
   obj.leftPos = rect.left
-  obj.widthPos = rect.width
-  obj.heightPos = rect.height
+  obj.widthRect = rect.width
+  obj.heightRect = rect.height
   // body margin needed for absolute elements
   obj.bodyMargin = parseFloat(getStyleStr(document.body, 'marginLeft'))
   return obj
