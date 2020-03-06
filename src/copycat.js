@@ -3,16 +3,24 @@ import {COPYCAT_CLASS} from './constants'
 
 // the copycat takes the subjects place
 export default {
+  id: 0,
   // setup the element that will take up space in the dom tree
   create(viscosity) {
     viscosity.copycat = document.createElement('div');
     viscosity.copycat.innerHTML = String.fromCharCode(160) // a space
     viscosity.copycat.classList.add(COPYCAT_CLASS);
+    viscosity.copycat.dataset.id = viscosity.id = this.id
+    this.id++
     appendAfter(viscosity.copycat)(viscosity.subject);
   },
 
   remove(viscosity) {
     viscosity.copycat.remove();
+    this.id = 0
+  },
+
+  getId(viscosity) {
+    return viscosity.id
   },
 
   applyStyles(viscosity) {

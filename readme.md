@@ -53,10 +53,9 @@ instance.toggle() // either runs init() or destroy(), respectively
 ### Todo:
 - ~~Handle inline elements (calc correct w/h)~~
 - ~~Don't reposition elements that's out of view~~
+- ~~MutationObserver for elements entering the dom~~
 - Create bookmarklet for easier testing/it's cool
-- MutationObserver for elements entering the dom
 - Make into custom element(?)
-- Disable out-of-view-items to save power
 
 #### Known bugs:
 - slight displacement of content that comes after a row of inline-block subjects. (not prio)

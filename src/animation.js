@@ -15,8 +15,8 @@ export default {
       viscosity.wereInView = true
     } else if (viscosity.wereInView) {
       // move it the fuck away, and don't care about it
+      this._setStyle(viscosity, window.innerHeight * 100)
       viscosity.wereInView = false
-      viscosity.subject.style.transform = `translateY(${window.innerHeight * 10}px)`
     }
   },
 

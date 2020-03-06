@@ -18,7 +18,7 @@ export default {
       height: heightRect + 'px',
       top: sumAsFloat(topPos, paddingTop) + 'px',
       left: leftPos - parseFloat(marginLeft) + 'px',
-      margin: margin !== '0px' && margin,
+      margin: margin !== '0px' && margin
     })
 
     if (viscosity.subject.firstElementChild) {
@@ -27,7 +27,14 @@ export default {
   },
 
   revert(viscosity) {
-    setTimeout(() => viscosity.subject.style.cssText = viscosity.originalPlacement.inlineStyle)
+    const to = viscosity.originalPlacement.inlineStyle
+    setTimeout(() => {
+      if (!to) {
+        viscosity.subject.removeAttribute('style')
+      } else {
+        viscosity.subject.style.cssText = to
+      }
+    })
 
     if (viscosity.subject.firstElementChild)
       viscosity.subject.firstElementChild.style.removeProperty('margin-top')

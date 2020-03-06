@@ -11,7 +11,7 @@ import Animation from './animation'
 import onResize from './resize'
 import Copycat from './copycat'
 import SubjectStyling from './subject-styling'
-// import Mutations from './mutations'
+import Observer from './observer'
 
 import {
   hasParentWithDataAttr,
@@ -30,17 +30,17 @@ class Viscosity {
       : easing || .3
 
     if (!this.subject) {
-      console.log('No subject! Cancelling')
       return
     }
 
-    this.subject.dataset.viscosity = 'is-bound'
-
-    // todo: better callback, not using time
-    // wait for all Viscosity to construct, before checking
-    assertThat(() => this.subject.dataset.viscosity === "is-bound").then(() => {
+    Observer.observe({
+      what: this.subject.parentElement,
+      assertThat: () => this.subject.dataset.viscosity === "is-bound"
+    }).then(() => {
       AssetsLoaded(this).then(this.init.bind(this));
-    });
+    })
+
+    this.subject.dataset.viscosity = 'is-bound'
 
     onResize(this.restart.bind(this))
   }
@@ -49,10 +49,6 @@ class Viscosity {
     setTimeout(() => {
       getStyleRefs(this.subject).then(refs => {
         this.originalPlacement = refs
-
-        if (!this.originalPlacement) {
-          console.log(`Didn't get any style refs, just got: `, this.originalPlacement)
-        }
 
         setTimeout(() => {
           if (hasParentWithDataAttr('viscosity', this.subject)) {
@@ -64,30 +60,27 @@ class Viscosity {
           Copycat.create(this)
           Copycat.applyStyles(this)
           Animation.start(this)
-          // Mutations.observe(this)
           this.subject.dataset.viscosity = 'is-running'
         }, 100)
-      }, 100)
-    })
+      })
+    }, 100)
   }
 
   destroy() {
     SubjectStyling.revert(this)
     Copycat.remove(this)
     Animation.stop(this)
-    // Mutations.unobserve(this)
     this.subject.dataset.viscosity = 'is-destroyed'
-
-    //assertThat(() => getStyleStr(this.subject, 'position') !== 'fixed').then(() => {
-    setTimeout(() => {
-      this.originalPlacement = undefined
-    }, 10)
   }
 
   restart() {
     if (Animation.isRunning(this)) {
       this.destroy()
-      assertThat(() => typeof this.originalPlacement === 'undefined').then(this.init.bind(this))
+
+      Observer.observe({
+        what: this.subject.parentElement,
+        assertThat: () => !this.subject.parentElement.querySelector(`[data-id='${Copycat.getId(this)}']`)
+      }).then(this.init.bind(this))
     }
   }
 
