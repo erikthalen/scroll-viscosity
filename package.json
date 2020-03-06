@@ -20,7 +20,8 @@
 	"homepage": "https://github.com/erikthalen/scroll-viscosity",
 	"scripts": {
 		"start": "webpack-dev-server",
-		"build": "webpack --config webpack.prod.js"
+		"build": "webpack --config webpack.prod.js",
+		"build:demo": "webpack --config webpack.config.js"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.8.6",

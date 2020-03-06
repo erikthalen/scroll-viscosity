@@ -33,7 +33,7 @@ export default {
   },
 
   start(viscosity) {
-    viscosity.isRunning = true
+    viscosity.isRunning = viscosity.wereInView = true
     this._update(viscosity)
   },
 
