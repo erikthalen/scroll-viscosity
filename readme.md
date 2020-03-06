@@ -56,7 +56,6 @@ instance.toggle() // either runs init() or destroy(), respectively
 - Create bookmarklet for easier testing/it's cool
 - MutationObserver for elements entering the dom
 - Make into custom element(?)
-- Disable out-of-view-items to save power
 
 #### Known bugs:
 - slight displacement of content that comes after a row of inline-block subjects. (not prio)
