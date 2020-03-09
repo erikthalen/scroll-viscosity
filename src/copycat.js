@@ -1,26 +1,58 @@
-import {appendAfter, getStyleStr, isImage, checkForInlineStyle} from './utils';
+import {appendAfter, getStyleStr, isImage, checkForInlineStyle} from './utils'
 import {COPYCAT_CLASS} from './constants'
 
-// the copycat takes the subjects place
 export default {
-  id: 0,
-  // setup the element that will take up space in the dom tree
-  create(viscosity) {
-    viscosity.copycat = document.createElement('div');
-    viscosity.copycat.innerHTML = String.fromCharCode(160) // a space
-    viscosity.copycat.classList.add(COPYCAT_CLASS);
-    viscosity.copycat.dataset.id = viscosity.id = this.id
-    this.id++
-    appendAfter(viscosity.copycat)(viscosity.subject);
+  id: 1,
+  copycats: [],
+  subscriptions: [],
+
+  get proxy() {
+    return new Proxy(this.copycats, {
+      set: (target, key, value) => {
+        // console.log('key', key, 'value', value)
+
+        target[key] = value
+        this.id = target.length
+
+        console.log(target, key, value, !target.length)
+
+        if (typeof value === 'number' && !target.length) {
+          this.subscriptions.forEach(subscription => {
+            console.log('!')
+            // setTimeout(subscription.cb, 10)
+          })
+        }
+
+        return true
+      }
+    })
   },
 
-  remove(viscosity) {
-    viscosity.copycat.remove();
-    this.id = 0
+  create(viscosity) {
+    viscosity.copycat = document.createElement('div')
+    this._addRef(viscosity.copycat)
+    viscosity.copycat.innerHTML = String.fromCharCode(160) // a space
+    viscosity.copycat.classList.add(COPYCAT_CLASS)
+    viscosity.copycat.dataset.id = viscosity.id = this._getId(viscosity)
+    appendAfter(viscosity.copycat)(viscosity.subject)
   },
 
   getId(viscosity) {
     return viscosity.id
+  },
+
+  remove(viscosity) {
+    viscosity.copycat.remove()
+    this._removeRef(viscosity.copycat)
+  },
+
+  subscribe(viscosity, cb) {
+    this.subscriptions.push({viscosity, cb})
+  },
+
+  unsubscribe(viscosity) {
+    const index = this.subscriptions.map(s => s.viscosity).indexOf(viscosity)
+    this.subscriptions.splice(index, 1)
   },
 
   applyStyles(viscosity) {
@@ -35,7 +67,7 @@ export default {
       widthRect,
       heightRect,
       float
-    } = viscosity.originalPlacement;
+    } = viscosity.originalPlacement
 
     Object.assign(viscosity.copycat.style, {
       width: widthRect + 'px',
@@ -50,19 +82,19 @@ export default {
       margin: this._getMargins(viscosity),
       padding: (padding !== '0px' && borderWidth !== '0px') && parseFloat(padding) + parseFloat(borderWidth) + 'px',
       float: this._ifNot('none')(float)
-    });
+    })
   },
 
   _getMargins(viscosity) {
-    return `${this._getMargin(viscosity, 'Top')} ${this._getMargin(viscosity, 'Right')} ${this._getMargin(viscosity, 'Bottom')} ${this._getMargin(viscosity, 'Left')}`;
+    return `${this._getMargin(viscosity, 'Top')} ${this._getMargin(viscosity, 'Right')} ${this._getMargin(viscosity, 'Bottom')} ${this._getMargin(viscosity, 'Left')}`
   },
 
   _getMargin(viscosity, direction) {
     if (checkForInlineStyle(viscosity.subject)) {
-      return parseFloat(viscosity.originalPlacement[`margin${direction}`]);
+      return parseFloat(viscosity.originalPlacement[`margin${direction}`])
     }
 
-    return (Math.max(parseFloat(viscosity.originalPlacement[`margin${direction}`]), parseFloat(this._getChildMargin(viscosity.subject, direction))) + 'px');
+    return (Math.max(parseFloat(viscosity.originalPlacement[`margin${direction}`]), parseFloat(this._getChildMargin(viscosity.subject, direction))) + 'px')
   },
 
   _getChildMargin(subject, direction) {
@@ -72,13 +104,8 @@ export default {
         ? 'lastElementChild'
         : null
 
-    if (!subject) {
-      // console.log('Found no subject, found: ', subject)
-      return
-    }
-
     if (!firstOrLastChild) {
-      return parseFloat(getStyleStr(subject, `margin${direction}`));
+      return parseFloat(getStyleStr(subject, `margin${direction}`))
     }
 
     // does first child have children?
@@ -89,7 +116,21 @@ export default {
       // else return child margin
       return parseFloat(getStyleStr(subject[firstOrLastChild], `margin${direction}`))
     }
+  },
 
+  _getId(viscosity) {
+    return this.copycats.find(e => e.element === viscosity.copycat).id
+  },
+
+  _removeRef(of) {
+    const index = this.copycats.map(e => e.element).indexOf(of)
+    this.proxy.splice(index, 1)
+    // this.id--
+  },
+
+  _addRef(of) {
+    this.proxy.push({element: of, id: this.id})
+    // this.id++
   },
 
   _accounted(viscosity, topPos) {
@@ -97,7 +138,7 @@ export default {
       ? topPos + viscosity.originalPlacement.bodyMargin
       : viscosity.originalPlacement.position === 'absolute'
         ? parseFloat(viscosity.originalPlacement.top)
-        : topPos + viscosity.originalPlacement.bodyMargin;
+        : topPos + viscosity.originalPlacement.bodyMargin
   },
 
   _ifNot(...values) {

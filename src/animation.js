@@ -12,11 +12,11 @@ export default {
     if (this._isRelevant(viscosity, position)) {
       // do the transformation
       this._setStyle(viscosity, position)
-      viscosity.wereInView = true
-    } else if (viscosity.wereInView) {
-      // move it the fuck away, and don't care about it
+      viscosity.inView = true
+  } else if (viscosity.inView) {
+      // move it far away
       this._setStyle(viscosity, window.innerHeight * 100)
-      viscosity.wereInView = false
+      viscosity.inView = false
     }
   },
 
@@ -33,7 +33,7 @@ export default {
   },
 
   start(viscosity) {
-    viscosity.isRunning = viscosity.wereInView = true
+    viscosity.isRunning = viscosity.inView = true
     this._update(viscosity)
   },
 
@@ -47,9 +47,7 @@ export default {
   },
 
   _isRelevant(viscosity, position) {
-    // todo: could be that we stop check,
-    // but we don't know for sure element is out of view
-    const offset = viscosity.originalPlacement.heightRect * 2
+    const offset = viscosity.originalPlacement.heightRect * .5
     const top = (position + viscosity.originalPlacement.heightRect) >= (viscosity.originalPlacement.topPos * -1) - offset
     const bottom = position <= (viscosity.originalPlacement.topPos - window.innerHeight) * -1 + offset
 

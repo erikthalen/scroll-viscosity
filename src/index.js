@@ -4,23 +4,15 @@
  * Erik Thalén - erikthalen.com
  */
 
-// import "regenerator-runtime/runtime";
-
 import AssetsLoaded from './assets-loaded'
 import Animation from './animation'
 import onResize from './resize'
 import Copycat from './copycat'
 import SubjectStyling from './subject-styling'
 import Observer from './observer'
+import Status from './status'
 
-import {
-  hasParentWithDataAttr,
-  getStyleRefs,
-  randomInt,
-  assertThat,
-  copycatIsGone,
-  getStyleStr
-} from './utils'
+import {hasParent, getStyleRefs, randomInt} from './utils'
 
 class Viscosity {
   constructor({element, easing, wacky}) {
@@ -35,52 +27,55 @@ class Viscosity {
 
     Observer.observe({
       what: this.subject.parentElement,
-      assertThat: () => this.subject.dataset.viscosity === "is-bound"
-    }).then(() => {
-      AssetsLoaded(this).then(this.init.bind(this));
-    })
+      until: () => Status.get(this.subject) === "is-bound"
+    }).then(AssetsLoaded(this).then(this.init.bind(this)))
 
-    this.subject.dataset.viscosity = 'is-bound'
+    Status.set(this.subject, 'is-bound')
 
     onResize(this.restart.bind(this))
   }
 
   init() {
-    setTimeout(() => {
-      getStyleRefs(this.subject).then(refs => {
-        this.originalPlacement = refs
+    getStyleRefs(this.subject).then(refs => {
+      this.originalPlacement = refs
 
-        setTimeout(() => {
-          if (hasParentWithDataAttr('viscosity', this.subject)) {
-            this.subject.dataset.viscosity = 'is-child'
-            return
-          }
+      if (hasParent('viscosity', this.subject)) {
+        Status.set(this.subject, 'is-child')
+        return
+      }
 
-          SubjectStyling.setup(this)
-          Copycat.create(this)
-          Copycat.applyStyles(this)
-          Animation.start(this)
-          this.subject.dataset.viscosity = 'is-running'
-        }, 100)
-      })
-    }, 100)
+      setTimeout(() => {
+        SubjectStyling.setup(this)
+        Copycat.create(this)
+        Copycat.applyStyles(this)
+        Animation.start(this)
+        Status.set(this.subject, 'is-running')
+        // console.log('id: ', this, Copycat.getId(this))
+      }, 10)
+    })
   }
 
   destroy() {
     SubjectStyling.revert(this)
     Copycat.remove(this)
     Animation.stop(this)
-    this.subject.dataset.viscosity = 'is-destroyed'
+    Status.set(this.subject, 'is-destroyed')
   }
 
   restart() {
     if (Animation.isRunning(this)) {
       this.destroy()
 
-      Observer.observe({
-        what: this.subject.parentElement,
-        assertThat: () => !this.subject.parentElement.querySelector(`[data-id='${Copycat.getId(this)}']`)
-      }).then(this.init.bind(this))
+      Copycat.subscribe(this, () => {
+        Observer.observe({
+          what: this.subject.parentElement,
+          until: () => !this.subject.parentElement.querySelector(`[data-id='${Copycat.getId(this)}']`)
+        }).then(() => {
+          // console.log(Copycat.getId(this))
+          Copycat.unsubscribe(this)
+          this.init()
+        })
+      })
     }
   }
 

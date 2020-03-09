@@ -1,4 +1,6 @@
 import {COPYCAT_CLASS} from './constants'
+import Observer from './observer'
+import Status from './status'
 
 /**
  * Number fns
@@ -105,31 +107,56 @@ const collectStyles = (el, obj) => {
   obj.heightRect = rect.height
   // body margin needed for absolute elements
   obj.bodyMargin = parseFloat(getStyleStr(document.body, 'marginLeft'))
+  el.dataset.viscosity = 'is-read'
   return obj
 }
 
 export function getStyleRefs(el) {
   return new Promise((resolve, reject) => {
+    Observer.observe({
+      what: el,
+      until: () => Status.get(el) === 'is-seen'
+    }).then(() => {
+      if (inline) {
+        Observer.observe({
+          what: el,
+          until: () => el.style.display === 'inline-block'
+        }).then(() => {
+          Observer.observe({
+            what: el,
+            until: () => Status.get(el) === 'is-read'
+          }).then(() => {
+            Observer.observe({
+              what: el,
+              until: () => el.style.cssText === obj.inline
+            }).then(() => {
+              resolve(styles)
+            })
+
+            el.style.cssText = obj.inline
+          })
+
+          const styles = collectStyles(el, obj)
+        })
+
+        el.style.display = 'inline-block'
+      } else {
+        Observer.observe({
+          what: el,
+          until: () => Status.get(el) === 'is-read'
+        }).then(() => {
+          resolve(styles)
+        })
+
+        const styles = collectStyles(el, obj)
+      }
+    })
+
     const inline = isInline(el)
     const obj = {}
     obj.inlineStyle = el.style.cssText
     obj.display = getStyleStr(el, 'display')
-
-    if (inline) {
-      el.style.display = 'inline-block'
-      setTimeout(() => {
-        const styles = collectStyles(el, obj)
-        el.style.cssText = obj.inline
-        setTimeout(() => {
-          resolve(styles)
-        })
-      })
-    } else {
-      const styles = collectStyles(el, obj)
-      setTimeout(() => {
-        resolve(styles)
-      })
-    }
+    Status.set(el, 'is-seen')
   })
 }
 
@@ -140,14 +167,14 @@ export function getStyleRefs(el) {
  * @param {number} count amount of times the attribute been seen
  * @return {boolean} if an ancestor has the attribute
  */
-export const hasParentWithDataAttr = (attribute, el, count = 0) => {
+export const hasParent = (attribute, el, count = 0) => {
   return el === document.body && count < 2
     ? false
     : count > 1
       ? true
       : el.dataset[attribute]
-        ? hasParentWithDataAttr(attribute, el.parentElement, count + 1)
-        : hasParentWithDataAttr(attribute, el.parentElement, count)
+        ? hasParent(attribute, el.parentElement, count + 1)
+        : hasParent(attribute, el.parentElement, count)
 }
 
 /**
@@ -169,37 +196,4 @@ export const isImage = el => el.tagName === 'IMG'
 export const checkForInlineStyle = el => {
   const firstChild = el.firstElementChild
   return (isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild)))
-}
-
-/**
- * takes a function and resolves when it fn returns true
- * @param {fn} predicate what to check
- */
-export const assertThat = predicate => {
-  let count = 0
-  const checkAgain = (predicate, resolve) => {
-    if (count > 100) {
-      console.warn(`tried ${count} times, but couldn't resolve ${predicate}`)
-      return 'fail'
-    }
-    if (predicate()) {
-      requestAnimationFrame(resolve)
-    } else {
-      return requestAnimationFrame(() => {
-        count++
-        checkAgain(predicate, resolve)
-      })
-    }
-  }
-  return new Promise(resolve => {
-    requestAnimationFrame(() => checkAgain(predicate, resolve))
-  })
-}
-
-export const copycatIsGone = viscosity => {
-  // console.log(!viscosity.subject.nextElementSibling, !viscosity.subject.nextElementSibling.classList.contains(COPYCAT_CLASS))
-  if (!viscosity.subject.nextElementSibling) {
-    return true
-  }
-  return !viscosity.subject.nextElementSibling.classList.contains(COPYCAT_CLASS)
 }

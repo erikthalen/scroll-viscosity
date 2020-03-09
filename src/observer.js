@@ -1,23 +1,23 @@
 export default {
-  callback(assertThat, resolve, mutationsList, observer) {
-    if (assertThat()) {
-      resolve()
+  callback(until, resolveObserver, mutationsList, observer) {
+    if (until()) {
+      resolveObserver()
       observer.disconnect()
     }
   },
 
-  observe({what, assertThat}) {
+  observe({what, until}) {
     const config = {
       attributes: true,
       childList: true,
       subtree: true,
-      assertThat
+      until
     }
-    return new Promise((resolve, reject) => {
-      if (assertThat()) {
-        resolve()
+    return new Promise((resolveObserver, reject) => {
+      if (until()) {
+        resolveObserver()
       } else {
-        this.observer = new MutationObserver(this.callback.bind(this, assertThat, resolve))
+        this.observer = new MutationObserver(this.callback.bind(this, until, resolveObserver))
         this.observer.observe(what, config)
       }
     })
