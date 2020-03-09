@@ -88,6 +88,9 @@ export const placementStyleProps = [
   'marginLeft',
   'marginRight',
   'paddingTop',
+  'paddingRight',
+  'paddingBottom',
+  'paddingLeft',
   'margin',
   'padding',
   'borderWidth',
@@ -95,16 +98,17 @@ export const placementStyleProps = [
 ]
 
 const collectStyles = (el, obj) => {
+	console.log((getStyleStr(el, 'paddingLeft')))
   const rect = el.getBoundingClientRect()
   // directly copy some styles
   placementStyleProps.filter(prop => prop !== 'display').forEach(style => (obj[style] = getStyleStr(el, style)))
   // split transforms matrix style on each matrix
   obj.transform = getStyleStr(el, 'transform').split(/[(,)]+/).filter(Boolean).map(asFloat)
   // calc correct top position
-  obj.topPos = rect.top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) - parseFloat(getStyleStr(el, 'paddingTop'))
-  obj.leftPos = rect.left
-  obj.widthRect = rect.width
-  obj.heightRect = rect.height
+  obj.topPos = rect.top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) + parseFloat(getStyleStr(el, 'paddingTop'))
+  obj.leftPos = rect.left + parseFloat(getStyleStr(el, 'paddingLeft'))
+  obj.widthRect = rect.width - parseFloat(getStyleStr(el, 'paddingLeft')) - parseFloat(getStyleStr(el, 'paddingRight'))
+  obj.heightRect = rect.height - parseFloat(getStyleStr(el, 'paddingTop')) - parseFloat(getStyleStr(el, 'paddingTop'))
   // body margin needed for absolute elements
   obj.bodyMargin = parseFloat(getStyleStr(document.body, 'marginLeft'))
   el.dataset.viscosity = 'is-read'

@@ -4,10 +4,11 @@ export default {
   setup(viscosity) {
     const {
       topPos,
-      paddingTop,
-      marginLeft,
       leftPos,
-      margin,
+      marginTop,
+      marginLeft,
+      paddingTop,
+      paddingLeft,
       widthRect,
       heightRect
     } = viscosity.originalPlacement
@@ -16,13 +17,14 @@ export default {
       position: 'fixed',
       width: widthRect + 'px',
       height: heightRect + 'px',
-      top: sumAsFloat(topPos, paddingTop) + 'px',
-      left: leftPos - parseFloat(marginLeft) + 'px',
+      top: topPos - parseFloat(paddingTop) + 'px',
+      left: leftPos - parseFloat(marginLeft) - parseFloat(paddingLeft) + 'px'
     })
 
-    if (viscosity.subject.firstElementChild) {
-      setTimeout(() => viscosity.subject.firstElementChild.style.marginTop = 0)
-    }
+	// note: why was this needed?
+    // if (viscosity.subject.firstElementChild) {
+    //   setTimeout(() => viscosity.subject.firstElementChild.style.marginTop = 0)
+    // }
   },
 
   revert(viscosity) {
@@ -35,7 +37,7 @@ export default {
       }
     })
 
-    if (viscosity.subject.firstElementChild)
-      viscosity.subject.firstElementChild.style.removeProperty('margin-top')
+    // if (viscosity.subject.firstElementChild)
+    //   viscosity.subject.firstElementChild.style.removeProperty('margin-top')
   }
 }
