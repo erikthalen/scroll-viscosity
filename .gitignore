@@ -3,3 +3,5 @@
 
 *.jpg
 /demo
+package-lock.*
+*.lock
