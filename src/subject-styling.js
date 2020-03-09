@@ -18,7 +18,6 @@ export default {
       height: heightRect + 'px',
       top: sumAsFloat(topPos, paddingTop) + 'px',
       left: leftPos - parseFloat(marginLeft) + 'px',
-      margin: margin !== '0px' && margin
     })
 
     if (viscosity.subject.firstElementChild) {

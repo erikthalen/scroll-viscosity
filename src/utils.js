@@ -96,7 +96,7 @@ export const placementStyleProps = [
 
 const collectStyles = (el, obj) => {
   const rect = el.getBoundingClientRect()
-  // directly copy styles
+  // directly copy some styles
   placementStyleProps.filter(prop => prop !== 'display').forEach(style => (obj[style] = getStyleStr(el, style)))
   // split transforms matrix style on each matrix
   obj.transform = getStyleStr(el, 'transform').split(/[(,)]+/).filter(Boolean).map(asFloat)

@@ -2,24 +2,20 @@ import {appendAfter, getStyleStr, isImage, checkForInlineStyle} from './utils'
 import {COPYCAT_CLASS} from './constants'
 
 export default {
-  id: 1,
+  // globals
+  id: 0,
   copycats: [],
   subscriptions: [],
 
   get proxy() {
     return new Proxy(this.copycats, {
       set: (target, key, value) => {
-        // console.log('key', key, 'value', value)
-
         target[key] = value
         this.id = target.length
 
-        console.log(target, key, value, !target.length)
-
         if (typeof value === 'number' && !target.length) {
           this.subscriptions.forEach(subscription => {
-            console.log('!')
-            // setTimeout(subscription.cb, 10)
+            setTimeout(subscription.cb, 100)
           })
         }
 
@@ -35,6 +31,7 @@ export default {
     viscosity.copycat.classList.add(COPYCAT_CLASS)
     viscosity.copycat.dataset.id = viscosity.id = this._getId(viscosity)
     appendAfter(viscosity.copycat)(viscosity.subject)
+    this.applyStyles(viscosity)
   },
 
   getId(viscosity) {
@@ -104,10 +101,6 @@ export default {
         ? 'lastElementChild'
         : null
 
-    if (!firstOrLastChild) {
-      return parseFloat(getStyleStr(subject, `margin${direction}`))
-    }
-
     // does first child have children?
     if (firstOrLastChild && subject[firstOrLastChild] && subject[firstOrLastChild][firstOrLastChild]) {
       // then run fn with the child
@@ -116,6 +109,10 @@ export default {
       // else return child margin
       return parseFloat(getStyleStr(subject[firstOrLastChild], `margin${direction}`))
     }
+
+    // no child
+    return parseFloat(getStyleStr(subject, `margin${direction}`))
+
   },
 
   _getId(viscosity) {

@@ -44,14 +44,10 @@ class Viscosity {
         return
       }
 
-      setTimeout(() => {
-        SubjectStyling.setup(this)
-        Copycat.create(this)
-        Copycat.applyStyles(this)
-        Animation.start(this)
-        Status.set(this.subject, 'is-running')
-        // console.log('id: ', this, Copycat.getId(this))
-      }, 10)
+      SubjectStyling.setup(this)
+      Copycat.create(this)
+      Animation.start(this)
+      Status.set(this.subject, 'is-running')
     })
   }
 
@@ -63,20 +59,21 @@ class Viscosity {
   }
 
   restart() {
-    if (Animation.isRunning(this)) {
-      this.destroy()
-
-      Copycat.subscribe(this, () => {
-        Observer.observe({
-          what: this.subject.parentElement,
-          until: () => !this.subject.parentElement.querySelector(`[data-id='${Copycat.getId(this)}']`)
-        }).then(() => {
-          // console.log(Copycat.getId(this))
-          Copycat.unsubscribe(this)
-          this.init()
-        })
-      })
+    if (!Animation.isRunning(this)) {
+      return
     }
+
+    Copycat.subscribe(this, () => {
+      Observer.observe({
+        what: this.subject.parentElement,
+        until: () => !this.subject.parentElement.querySelector(`[data-id='${Copycat.getId(this)}']`)
+      }).then(() => {
+        Copycat.unsubscribe(this)
+        this.init()
+      })
+    })
+
+    this.destroy()
   }
 
   toggle() {
