@@ -55,6 +55,7 @@ instance.toggle() // either runs init() or destroy(), respectively
 - ~~Don't reposition elements that's out of view~~
 - ~~MutationObserver for elements entering the dom~~
 - ~~Make everything event/cb based~~
+- Silence padding/margin warnings in firefox
 - Create bookmarklet for easier testing/it's cool
 
 #### Known bugs:
