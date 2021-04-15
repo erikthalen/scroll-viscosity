@@ -1,0 +1,81 @@
+<!--<h1>A floating rock:</h1>
+
+<img class="viscosity big" data-amount="0.05" src="bee.png" />
+-->
+
+<header>
+	Springy gives elements slower reactions<br>
+	<input type="checkbox" name="toggle" id="toggle" class="toggle-effect" />
+	<label for="toggle">
+		effect
+	</label>
+</header>
+
+<h3 class="title">Use it...</h3>
+
+<p>deeply nested</p>
+<div class="viscosity">
+	<h1>This content has the effect</h1>
+	<!-- <h1>As well as this content, that is placed inside</h1> -->
+	<!-- <div class="viscosity">
+	</div> -->
+</div>
+
+<p>on elements with weird margins</p>
+
+<div class="viscosity odd-margins">
+	Erik Erik Erik Erik Erik
+</div>
+
+<div class="viscosity odd-margins" style="background-color: blue;">
+	Another Another Another Another
+</div>
+
+
+<p>directly on an img-tag</p>
+<img class="viscosity" src="bee.png" />
+
+<p>on a list (with different easing)</p>
+<ul>
+	<li class="viscosity" data-amount=".45">Bouncy</li>
+	<li class="viscosity" data-amount=".4">Bouncy</li>
+	<li class="viscosity" data-amount=".35">Bouncy</li>
+	<li class="viscosity" data-amount=".3">Bouncy</li>
+	<li class="viscosity" data-amount=".25">Bouncy</li>
+	<li class="viscosity" data-amount=".2">Bouncy</li>
+</ul>
+
+<p>on a parent-div</p>
+<div class="viscosity">
+	<img src="bee.png" />
+</div>
+
+<p>on an absolute element</p>
+<div class="relative">
+	<div class="viscosity absolute">
+		<img src="honey.png" />
+	</div>
+</div>
+
+<p>on element with margin</p>
+<h1 class="viscosity margin">Lorem Ipsum dolor sit amet</h1>
+<p>on element with padding</p>
+<h1 class="viscosity padding">Lorem Ipsum dolor sit amet</h1>
+
+<p>on element with max-width</p>
+<img class="viscosity max-width" src="bee.png" />
+
+<p>on small element inside larger container</p>
+<div class="container">
+	<img class="viscosity small" src="bee.png" />
+</div>
+
+<p>todo: on elements in a flex-container</p>
+<div class="container flex">
+	<img class="viscosity" data-amount=".1" src="bee.png" />
+	<img class="viscosity" data-amount=".15" src="bee.png" />
+	<img class="viscosity" data-amount=".2" src="bee.png" />
+</div>
+
+<p>on element with background</p>
+<img class="viscosity background" src="bee.png" />
