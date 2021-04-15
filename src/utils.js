@@ -1,4 +1,4 @@
-import {COPYCAT_CLASS} from './constants'
+import { COPYCAT_CLASS } from './constants'
 import Observer from './observer'
 import Status from './status'
 
@@ -94,21 +94,36 @@ export const placementStyleProps = [
   'margin',
   'padding',
   'borderWidth',
-  'float'
+  'float',
 ]
 
 const collectStyles = (el, obj) => {
-	console.log((getStyleStr(el, 'paddingLeft')))
+  
   const rect = el.getBoundingClientRect()
   // directly copy some styles
-  placementStyleProps.filter(prop => prop !== 'display').forEach(style => (obj[style] = getStyleStr(el, style)))
+  placementStyleProps
+    .filter(prop => prop !== 'display')
+    .forEach(style => (obj[style] = getStyleStr(el, style)))
   // split transforms matrix style on each matrix
-  obj.transform = getStyleStr(el, 'transform').split(/[(,)]+/).filter(Boolean).map(asFloat)
+  obj.transform = getStyleStr(el, 'transform')
+    .split(/[(,)]+/)
+    .filter(Boolean)
+    .map(asFloat)
   // calc correct top position
-  obj.topPos = rect.top + window.pageYOffset - parseFloat(getStyleStr(el, 'marginTop')) + parseFloat(getStyleStr(el, 'paddingTop'))
+  obj.topPos =
+    rect.top +
+    window.pageYOffset -
+    parseFloat(getStyleStr(el, 'marginTop')) +
+    parseFloat(getStyleStr(el, 'paddingTop'))
   obj.leftPos = rect.left + parseFloat(getStyleStr(el, 'paddingLeft'))
-  obj.widthRect = rect.width - parseFloat(getStyleStr(el, 'paddingLeft')) - parseFloat(getStyleStr(el, 'paddingRight'))
-  obj.heightRect = rect.height - parseFloat(getStyleStr(el, 'paddingTop')) - parseFloat(getStyleStr(el, 'paddingTop'))
+  obj.widthRect =
+    rect.width -
+    parseFloat(getStyleStr(el, 'paddingLeft')) -
+    parseFloat(getStyleStr(el, 'paddingRight'))
+  obj.heightRect =
+    rect.height -
+    parseFloat(getStyleStr(el, 'paddingTop')) -
+    parseFloat(getStyleStr(el, 'paddingTop'))
   // body margin needed for absolute elements
   obj.bodyMargin = parseFloat(getStyleStr(document.body, 'marginLeft'))
   el.dataset.viscosity = 'is-read'
@@ -119,20 +134,20 @@ export function getStyleRefs(el) {
   return new Promise((resolve, reject) => {
     Observer.observe({
       what: el,
-      until: () => Status.get(el) === 'is-seen'
+      until: () => Status.get(el) === 'is-seen',
     }).then(() => {
       if (inline) {
         Observer.observe({
           what: el,
-          until: () => el.style.display === 'inline-block'
+          until: () => el.style.display === 'inline-block',
         }).then(() => {
           Observer.observe({
             what: el,
-            until: () => Status.get(el) === 'is-read'
+            until: () => Status.get(el) === 'is-read',
           }).then(() => {
             Observer.observe({
               what: el,
-              until: () => el.style.cssText === obj.inline
+              until: () => el.style.cssText === obj.inline,
             }).then(() => {
               resolve(styles)
             })
@@ -147,7 +162,7 @@ export function getStyleRefs(el) {
       } else {
         Observer.observe({
           what: el,
-          until: () => Status.get(el) === 'is-read'
+          until: () => Status.get(el) === 'is-read',
         }).then(() => {
           resolve(styles)
         })
@@ -175,10 +190,10 @@ export const hasParent = (attribute, el, count = 0) => {
   return el === document.body && count < 2
     ? false
     : count > 1
-      ? true
-      : el.dataset[attribute]
-        ? hasParent(attribute, el.parentElement, count + 1)
-        : hasParent(attribute, el.parentElement, count)
+    ? true
+    : el.dataset[attribute]
+    ? hasParent(attribute, el.parentElement, count + 1)
+    : hasParent(attribute, el.parentElement, count)
 }
 
 /**
@@ -199,5 +214,7 @@ export const isImage = el => el.tagName === 'IMG'
  */
 export const checkForInlineStyle = el => {
   const firstChild = el.firstElementChild
-  return (isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild)))
+  return (
+    isInline(el) || (firstChild && isInline(firstChild) && !isImage(firstChild))
+  )
 }

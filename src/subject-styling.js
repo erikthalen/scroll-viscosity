@@ -1,4 +1,4 @@
-import {sumAsFloat} from './utils'
+import { sumAsFloat } from './utils'
 
 export default {
   setup(viscosity) {
@@ -10,7 +10,7 @@ export default {
       paddingTop,
       paddingLeft,
       widthRect,
-      heightRect
+      heightRect,
     } = viscosity.originalPlacement
 
     Object.assign(viscosity.subject.style, {
@@ -18,10 +18,10 @@ export default {
       width: widthRect + 'px',
       height: heightRect + 'px',
       top: topPos - parseFloat(paddingTop) + 'px',
-      left: leftPos - parseFloat(marginLeft) - parseFloat(paddingLeft) + 'px'
+      left: leftPos - parseFloat(marginLeft) - parseFloat(paddingLeft) + 'px',
     })
 
-	// note: why was this needed?
+    // note: why was this needed?
     // if (viscosity.subject.firstElementChild) {
     //   setTimeout(() => viscosity.subject.firstElementChild.style.marginTop = 0)
     // }
@@ -39,5 +39,5 @@ export default {
 
     // if (viscosity.subject.firstElementChild)
     //   viscosity.subject.firstElementChild.style.removeProperty('margin-top')
-  }
+  },
 }

@@ -70,7 +70,7 @@ class Viscosity {
     //     this.init()
     //   })
     // })
-    
+
     this.destroy()
     setTimeout(this.init.bind(this), 250)
   }

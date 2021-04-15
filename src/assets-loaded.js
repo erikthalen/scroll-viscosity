@@ -1,20 +1,24 @@
-const asyncAllIsLoaded = (images) => {
-  return Promise.all(images.reduce((promises, img) => {
-    if (img.complete)
+const asyncAllIsLoaded = images => {
+  return Promise.all(
+    images.reduce((promises, img) => {
+      if (img.complete) return promises
+
+      promises.push(
+        new Promise(resolve => {
+          img.onload = resolve
+        })
+      )
+
       return promises
-
-    promises.push(new Promise((resolve) => {
-      img.onload = resolve
-    }))
-
-    return promises
-  }, []))
+    }, [])
+  )
 }
 
 export function ImagesLoaded(viscosity) {
-  const images = (viscosity.subject.tagName === 'IMG')
-    ? [viscosity.subject]
-    : [...viscosity.subject.querySelectorAll('img')]
+  const images =
+    viscosity.subject.tagName === 'IMG'
+      ? [viscosity.subject]
+      : [...viscosity.subject.querySelectorAll('img')]
 
   return asyncAllIsLoaded(images)
 }
@@ -25,6 +29,6 @@ export function FontsLoaded() {
     : document.fonts.ready
 }
 
-export default function(viscosity) {
+export default function (viscosity) {
   return ImagesLoaded(viscosity).then(FontsLoaded)
 }

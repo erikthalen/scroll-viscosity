@@ -4,5 +4,5 @@ export default {
   },
   set(subject, newStatus) {
     subject.dataset.viscosity = newStatus
-  }
+  },
 }
