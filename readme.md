@@ -2,7 +2,7 @@
 
 # Viscosity
 
-### 🐝 [Demo](http://www.erikthalen.com/bodega/viscosity)  🐝
+### 🐝 [Demo](https://zx3my.csb.app/)  🐝
 
 Makes an element react slower to scrolling,  
 like it was put into honey.
